@@ -87,16 +87,13 @@ export const updateUser = createAsyncThunk('user/update', async (user: UserType,
 //   Token: String,
 //   sub: string
 // };
-
-
-
-
-export const getInitialState = () => {
+export const decodeToken = () => {
   const token = localStorage.getItem('token');
   if (token) {
     console.log(token);
     
   try {
+    
     const payload = token.split(".")[1]
     const decoded = JSON.parse(atob(payload))
     return decoded
@@ -109,7 +106,7 @@ export const getInitialState = () => {
 
 const  userSlice =  createSlice({
   name: "User",
-  initialState: getInitialState() ,
+  initialState: decodeToken(),
   // initialState: {} as UserState,
   reducers: {clearError: (state) => {
     state.error = null;
