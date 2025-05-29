@@ -74,7 +74,7 @@ public class JwtService
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // מזהה המשתמש
             new Claim(JwtRegisteredClaimNames.Email, user.Email), // אימייל
             new Claim(ClaimTypes.Role, user.RoleId == 2 ? "Admin" : "User"), // תפקיד המשתמש
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // מזהה ייחודי לטוקן
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // מזהה ייחודי לטוקן
 
 
             new Claim("UserName", user.UserName),
