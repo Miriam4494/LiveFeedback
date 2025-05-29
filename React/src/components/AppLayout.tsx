@@ -49,20 +49,20 @@ import { motion } from "framer-motion"
 import { clearUser } from "../redux/UserSlice"
 
 // New elegant color palette
-// const colors = {
-//   primary: "#E07A5F", // Terracotta
-//   secondary: "#3D405B", // Dark slate blue
-//   light: "#F4F1DE", // Cream
-//   accent: "#81B29A", // Sage green
-//   dark: "#2D3142", // Dark blue-gray
-// }
 const colors = {
-  primary: "#E8B4B8", // Rose
-  secondary: "#C49799", // Dusty rose
-  light: "#F5E6E8", // Light pink
-  accent: "#D4AF37", // Gold
-  dark: "#8B4A6B", // Mauve
+  primary: "#E07A5F", // Terracotta
+  secondary: "#3D405B", // Dark slate blue
+  light: "#F4F1DE", // Cream
+  accent: "#81B29A", // Sage green
+  dark: "#2D3142", // Dark blue-gray
 }
+// const colors = {
+//   primary: "#E8B4B8", // Rose
+//   secondary: "#C49799", // Dusty rose
+//   light: "#F5E6E8", // Light pink
+//   accent: "#D4AF37", // Gold
+//   dark: "#8B4A6B", // Mauve
+// }
 
 const DRAWER_WIDTH = 280
 const COLLAPSED_DRAWER_WIDTH = 80
