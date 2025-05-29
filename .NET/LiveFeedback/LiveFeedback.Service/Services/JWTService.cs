@@ -77,11 +77,11 @@ public class JwtService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // מזהה ייחודי לטוקן
 
 
-            new Claim("UserName", user.UserName),
-new Claim("Points", user.Points.ToString()),
-new Claim("SendQuestion", user.SendQuestion.HasValue ? user.SendQuestion.Value.ToString() : "false"),
-new Claim("SendFeedback", user.SendFeedback.HasValue ? user.SendFeedback.Value.ToString() : "false"),
-new Claim("RoleId", user.RoleId.ToString()),
+//            new Claim("UserName", user.UserName),
+//new Claim("Points", user.Points.ToString()),
+//new Claim("SendQuestion", user.SendQuestion.HasValue ? user.SendQuestion.Value.ToString() : "false"),
+//new Claim("SendFeedback", user.SendFeedback.HasValue ? user.SendFeedback.Value.ToString() : "false"),
+//new Claim("RoleId", user.RoleId.ToString()),
 
         };
 
