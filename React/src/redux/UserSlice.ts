@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginUserType, RegisterUserType, UserState, UserType } from "../types/User";
+import { LoginUserType, RegisterUserType, UserType } from "../types/User";
 import axios from "axios";
 import { RootState } from "./Store";
 // import { jwtDecode } from "jwt-decode";
