@@ -71,6 +71,8 @@ public class JwtService
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var claims = new[]
         {
+
+
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // מזהה המשתמש
             new Claim(JwtRegisteredClaimNames.Email, user.Email), // אימייל
             new Claim(ClaimTypes.Role, user.RoleId == 2 ? "Admin" : "User"), // תפקיד המשתמש

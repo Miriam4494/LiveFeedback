@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginUserType, RegisterUserType, UserType } from "../types/User";
+import { LoginUserType, RegisterUserType, UserState, UserType } from "../types/User";
 import axios from "axios";
 import { RootState } from "./Store";
 // import { jwtDecode } from "jwt-decode";
@@ -87,26 +87,64 @@ export const updateUser = createAsyncThunk('user/update', async (user: UserType,
 //   Token: String,
 //   sub: string
 // };
-export const decodeToken = () => {
+// export const decodeToken = () => {
+//   const token = localStorage.getItem('token');
+//   if (token) {
+//     console.log(token);
+    
+//   try {
+    
+//     const payload = token.split(".")[1]
+//     const decoded = JSON.parse(atob(payload))
+//     return decoded
+//   } catch (err) {
+//     console.error("Failed to decode token", err)
+//     return null
+//   }}
+// }
+export const getInitialState = (): UserState => {
   const token = localStorage.getItem('token');
-  if (token) {
-    console.log(token);
-    
+
+  if (!token) {
+    return {
+      user: null,
+      loading: false,
+      error: null,
+    };
+  }
+
   try {
-    
-    const payload = token.split(".")[1]
-    const decoded = JSON.parse(atob(payload))
-    return decoded
+    const payload = token.split(".")[1];
+    const decoded = JSON.parse(atob(payload));
+
+    return {
+      user: {
+        id: Number(decoded.sub),
+        userName: decoded.UserName ?? null,
+        password: decoded.Password ?? null,
+        email: decoded.email ?? null,
+        points: Number(decoded.Points ?? 0),
+        sendQuestion: decoded.SendQuestion === "true",
+        sendFeedback: decoded.SendFeedback === "true",
+        roleId: Number(decoded.RoleId ?? 0),
+      },
+      loading: false,
+      error: null,
+    };
   } catch (err) {
-    console.error("Failed to decode token", err)
-    return null
-  }}
-}
+    console.error("Failed to decode token", err);
+    return {
+      user: null,
+      loading: false,
+      error: null,
+    };
+  }
+};
 
 
 const  userSlice =  createSlice({
   name: "User",
-  initialState: decodeToken(),
+  initialState: getInitialState(),
   // initialState: {} as UserState,
   reducers: {clearError: (state) => {
     state.error = null;
