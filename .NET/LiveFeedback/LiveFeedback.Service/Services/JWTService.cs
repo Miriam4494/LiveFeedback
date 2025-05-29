@@ -69,20 +69,20 @@ public class JwtService
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        //var claims = new List<Claim> {
-        //    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // מזהה המשתמש
-        //    new Claim(JwtRegisteredClaimNames.Email, user.Email), // אימייל
-        //    new Claim(ClaimTypes.Role, user.UserRole.RoleName), // תפקיד המשתמש
-
-        //    //new Claim(ClaimTypes.Role, user.RoleId == 1 ? "Admin" : "User"), // תפקיד המשתמש
-        //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // מזהה ייחודי לטוקן};
-        //};
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // מזהה המשתמש
             new Claim(JwtRegisteredClaimNames.Email, user.Email), // אימייל
             new Claim(ClaimTypes.Role, user.RoleId == 2 ? "Admin" : "User"), // תפקיד המשתמש
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // מזהה ייחודי לטוקן
+
+
+            new Claim("UserName", user.UserName),
+new Claim("Points", user.Points.ToString()),
+new Claim("SendQuestion", user.SendQuestion.HasValue ? user.SendQuestion.Value.ToString() : "false"),
+new Claim("SendFeedback", user.SendFeedback.HasValue ? user.SendFeedback.Value.ToString() : "false"),
+new Claim("RoleId", user.RoleId.ToString()),
+
         };
 
         var token = new JwtSecurityToken(

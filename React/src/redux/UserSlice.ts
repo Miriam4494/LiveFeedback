@@ -89,38 +89,6 @@ export const updateUser = createAsyncThunk('user/update', async (user: UserType,
 // };
 
 
-// const getInitialState = (): UserState => {
-//   const token = localStorage.getItem("token");
-//   if (token) {
-//     try {
-//       const payload = token.split(".")[1];
-//       const decoded = JSON.parse(atob(payload));
-//       return {
-//         user: {
-//           id: decoded.sub,
-//           email: decoded.email,
-//           userName: decoded.userName,
-//           roleId: decoded.roleId, // אם יש
-//           points: decoded.points, // אם יש
-//           sendQuestion: decoded.sendQuestion, // אם יש
-//           sendFeedback: decoded.sendFeedback, // אם יש
-//           password: decoded.password, // לא שמור בטוקן, אבל חובה ב־UserType שלך
-//           questions: decoded.questions, // כנ"ל
-//         },
-//         loading: false,
-//         error: null,
-//       };
-//     } catch (err) {
-//       console.error("Failed to decode token", err);
-//     }
-//   }
-//   return {
-//     user: null,
-//     loading: false,
-//     error: null,
-//   };
-// };
-
 
 
 export const getInitialState = () => {
