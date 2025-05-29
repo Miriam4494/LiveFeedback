@@ -23,8 +23,8 @@ import {
   useMediaQuery,
   useTheme,
   Divider,
-  Badge,
-  Tooltip,
+  // Badge,
+  // Tooltip,
   alpha,
   Collapse,
 } from "@mui/material"
@@ -37,7 +37,7 @@ import {
   Add as AddIcon,
   ViewList as ViewListIcon,
   Person as PersonIcon,
-  Notifications as NotificationsIcon,
+  // Notifications as NotificationsIcon,
   ChevronLeft as ChevronLeftIcon,
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
@@ -49,12 +49,19 @@ import { motion } from "framer-motion"
 import { clearUser } from "../redux/UserSlice"
 
 // New elegant color palette
+// const colors = {
+//   primary: "#E07A5F", // Terracotta
+//   secondary: "#3D405B", // Dark slate blue
+//   light: "#F4F1DE", // Cream
+//   accent: "#81B29A", // Sage green
+//   dark: "#2D3142", // Dark blue-gray
+// }
 const colors = {
-  primary: "#E07A5F", // Terracotta
-  secondary: "#3D405B", // Dark slate blue
-  light: "#F4F1DE", // Cream
-  accent: "#81B29A", // Sage green
-  dark: "#2D3142", // Dark blue-gray
+  primary: "#E8B4B8", // Rose
+  secondary: "#C49799", // Dusty rose
+  light: "#F5E6E8", // Light pink
+  accent: "#D4AF37", // Gold
+  dark: "#8B4A6B", // Mauve
 }
 
 const DRAWER_WIDTH = 280
@@ -622,13 +629,13 @@ const AppLayout = () => {
                   </motion.div>
                 ) : (
                   <>
-                    <Tooltip title="Notifications">
+                    {/* <Tooltip title="Notifications">
                       <IconButton sx={{ mx: 1, color: colors.secondary }}>
                         <Badge badgeContent={3} sx={{ "& .MuiBadge-badge": { bgcolor: colors.primary } }}>
                           <NotificationsIcon />
                         </Badge>
                       </IconButton>
-                    </Tooltip>
+                    </Tooltip> */}
 
                     <IconButton onClick={handleOpenMenu} sx={{ ml: 1 }}>
                       <Avatar

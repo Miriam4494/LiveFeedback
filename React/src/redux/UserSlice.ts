@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginUserType, RegisterUserType, UserType } from "../types/User";
+import { LoginUserType, RegisterUserType, UserState, UserType } from "../types/User";
 import axios from "axios";
 import { RootState } from "./Store";
 // import { jwtDecode } from "jwt-decode";
@@ -105,7 +105,7 @@ export const decodeToken = () => {
 
 const  userSlice =  createSlice({
   name: "User",
-  initialState: decodeToken(),
+  initialState: decodeToken() as UserState,
   // initialState: {} as UserState,
   reducers: {clearError: (state) => {
     state.error = null;
