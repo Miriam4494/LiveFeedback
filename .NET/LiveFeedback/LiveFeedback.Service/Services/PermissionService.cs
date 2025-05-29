@@ -42,16 +42,10 @@ namespace LiveFeedback.Services.Services
       
         public async Task<PermissionDTO> UpdatePermissionAsync(int id, PermissionDTO permissionDto)
         {
-            // מציאת התמונה לפי ה-ID בלבד
             var permission = await _permissionRepository.GetByIdAsync(id);
             if (permission == null) return null;
-
-            // ממפים את ה-DTO ל-Entity (MyImage), אבל לא משפיעים על ה-ID
             Permission entity = _mapper.Map<Permission>(permissionDto);
-
-            // עושים Save רק לאחר המיפוי, לא מעדכנים את ה-ID
-            await _permissionRepository.UpdateAsync(id, entity);  // אל תעביר את ה-ID כאן
-
+            await _permissionRepository.UpdateAsync(id, entity);  
             return _mapper.Map<PermissionDTO>(entity);
         }
 

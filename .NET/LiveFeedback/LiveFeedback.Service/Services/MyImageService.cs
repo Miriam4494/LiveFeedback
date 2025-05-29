@@ -42,16 +42,10 @@ namespace LiveFeedback.Services.Services
 
         public async Task<MyImageDTO> UpdateImageAsync(int id, MyImageDTO imageDto)
         {
-            // מציאת התמונה לפי ה-ID בלבד
             var image = await _myImageRepository.GetByIdAsync(id);
             if (image == null) return null;
-
-            // ממפים את ה-DTO ל-Entity (MyImage), אבל לא משפיעים על ה-ID
             MyImage entity = _mapper.Map<MyImage>(imageDto);
-
-            // עושים Save רק לאחר המיפוי, לא מעדכנים את ה-ID
-            await _myImageRepository.UpdateAsync(id, entity);  // אל תעביר את ה-ID כאן
-
+            await _myImageRepository.UpdateAsync(id, entity);  
             return _mapper.Map<MyImageDTO>(entity);
         }
 

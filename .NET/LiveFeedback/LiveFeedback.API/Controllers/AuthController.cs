@@ -75,14 +75,15 @@ namespace LiveFeedback.API.Controllers
             return Ok(new
             {
                 Token = token,
-                User = new
-                {
-                    createdUser.Id,
-                    createdUser.UserName,
-                    createdUser.Email,
-                    createdUser.RoleId,
-                    createdUser.Points
-                },
+                //User = new
+                //{
+                //    createdUser.Id,
+                //    createdUser.UserName,
+                //    createdUser.Email,
+                //    createdUser.RoleId,
+                //    createdUser.Points
+                //},
+                User = createdUser,
                 Message = "You have successfully registered."
             });
         }
