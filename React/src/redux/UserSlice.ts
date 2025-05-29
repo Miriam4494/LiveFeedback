@@ -87,25 +87,61 @@ export const updateUser = createAsyncThunk('user/update', async (user: UserType,
 //   Token: String,
 //   sub: string
 // };
-export const decodeToken = () => {
-  const token = localStorage.getItem('token');
+
+
+const getInitialState = (): UserState => {
+  const token = localStorage.getItem("token");
   if (token) {
-    console.log(token);
+    try {
+      const payload = token.split(".")[1];
+      const decoded = JSON.parse(atob(payload));
+      return {
+        user: {
+          id: decoded.sub,
+          email: decoded.email,
+          userName: decoded.userName,
+          roleId: decoded.roleId, // אם יש
+          points: decoded.points, // אם יש
+          sendQuestion: decoded.sendQuestion, // אם יש
+          sendFeedback: decoded.sendFeedback, // אם יש
+          password: decoded.password, // לא שמור בטוקן, אבל חובה ב־UserType שלך
+          questions: decoded.questions, // כנ"ל
+        },
+        loading: false,
+        error: null,
+      };
+    } catch (err) {
+      console.error("Failed to decode token", err);
+    }
+  }
+  return {
+    user: null,
+    loading: false,
+    error: null,
+  };
+};
+
+
+
+// export const decodeToken = () => {
+//   const token = localStorage.getItem('token');
+//   if (token) {
+//     console.log(token);
     
-  try {
-    const payload = token.split(".")[1]
-    const decoded = JSON.parse(atob(payload))
-    return decoded
-  } catch (err) {
-    console.error("Failed to decode token", err)
-    return null
-  }}
-}
+//   try {
+//     const payload = token.split(".")[1]
+//     const decoded = JSON.parse(atob(payload))
+//     return decoded
+//   } catch (err) {
+//     console.error("Failed to decode token", err)
+//     return null
+//   }}
+// }
 
 
 const  userSlice =  createSlice({
   name: "User",
-  initialState: decodeToken() as UserState,
+  initialState: getInitialState() as UserState,
   // initialState: {} as UserState,
   reducers: {clearError: (state) => {
     state.error = null;
