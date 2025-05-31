@@ -892,7 +892,11 @@ const MyQuestions = () => {
   useEffect(() => {
     console.log(questions);
     
-    if(!questions || questions.length === 0) return;
+    console.log("questions:", questions);
+  console.log("typeof questions:", typeof questions);
+  console.log("isArray:", Array.isArray(questions));
+
+  if (!Array.isArray(questions) || questions.length === 0) return;
     
     const filtered = questions.filter(q => q.userId == currentUser?.id)
     setMyQuestions(filtered);
