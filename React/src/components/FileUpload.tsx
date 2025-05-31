@@ -651,22 +651,22 @@ const FileUpload = () => {
       // Upload files if any
       if (files.length > 0) {
         for (const file of files) {
-          const cleanedName = cleanFileName(file.name);
-        const cleanFile =new File([file], cleanedName, { type: file.type });
+        //   const cleanedName = cleanFileName(file.name);
+        // const cleanFile =new File([file], cleanedName, { type: file.type });
           // file.name = cleanFileName(file.name) // Clean file name
           const uploadUrlResponse = await axios.get(`${API_BASE_URL}S3/upload-url`, {
-            params: { fileName: cleanFile.name, contentType: cleanFile.type },
+            params: { fileName: file.name, contentType: file.type },
           })
 
-          await axios.put(uploadUrlResponse.data.url, cleanFile, {
+          await axios.put(uploadUrlResponse.data.url, file, {
             headers: { "Content-Type": file.type },
           })
 
-          const downloadUrlResponse = await axios.get(`${API_BASE_URL}S3/download-url/${cleanFile.name}`)
+          const downloadUrlResponse = await axios.get(`${API_BASE_URL}S3/download-url/${file.name}`)
           await axios.post(`${API_BASE_URL}S3/save-file`, {
             imageUrl: downloadUrlResponse.data.downloadUrl,
             questionId: questionId,
-            name: cleanFile.name,
+            name: file.name,
           })
         }
       }
