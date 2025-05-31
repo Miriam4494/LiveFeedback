@@ -853,12 +853,24 @@ const MyQuestions = () => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [uploadLoading, setUploadLoading] = useState(false)
   const [expandedFeedbackQuestionId, setExpandedFeedbackQuestionId] = useState<number | null>(null)
+  const [questions, setQuestions] = useState<Question[]>([])
 
   const theme = useTheme()
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
+  const q = useSelector((state: RootState) => state.Questions.questions)
 
   const dispatch: AppDispatch = useDispatch()
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      await dispatch(getQuestions())
+      setLoading(false)
+    }
+    fetchQuestions()
+  }, [dispatch])
 
+  useEffect(() => {
+    setQuestions(q || [])
+  }, [q])
   // Fetch questions on component mount
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -875,6 +887,13 @@ const MyQuestions = () => {
     fetchQuestions()
   }, [dispatch, currentUser])
 
+
+  useEffect(() => {
+
+    const filtered = questions.filter(q => q.userId === currentUser?.id)
+    setMyQuestions(filtered);
+
+  }, [questions])
   // Update local state when user data changes
   useEffect(() => {
     if (currentUser?.questions) {
