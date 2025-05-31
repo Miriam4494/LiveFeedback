@@ -889,7 +889,7 @@ const MyQuestions = () => {
 
 
   useEffect(() => {
-
+    if(!questions || questions.length === 0) return;
     const filtered = questions.filter(q => q.userId === currentUser?.id)
     setMyQuestions(filtered);
 
