@@ -847,7 +847,7 @@ const MyQuestions = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<Question>({} as Question)
   const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
-  const [initialLoading, ] = useState(true)
+  const [initialLoading,setInitialLoading ] = useState(true)
   const [success, setSuccess] = useState("")
   const [error, setError] = useState("")
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
@@ -872,21 +872,21 @@ const MyQuestions = () => {
     setQuestions(q || [])
   }, [q])
   // Fetch questions on component mount
-  // useEffect(() => {
-  //   const fetchQuestions = async () => {
-  //     try {
-  //       console.log(currentUser);
-  //       setInitialLoading(true)
-  //       setMyQuestions(currentUser?.questions || [])
-  //     } catch (err) {
-  //       setError("Failed to load questions. Please try again.")
-  //     } finally {
-  //       setInitialLoading(false)
-  //     }
-  //   }
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        console.log(currentUser);
+        setInitialLoading(true)
+        // setMyQuestions(currentUser?.questions || [])
+      } catch (err) {
+        setError("Failed to load questions. Please try again.")
+      } finally {
+        setInitialLoading(false)
+      }
+    }
 
-  //   fetchQuestions()
-  // }, [dispatch, currentUser])
+    fetchQuestions()
+  }, [dispatch, currentUser])
 
 
   useEffect(() => {
