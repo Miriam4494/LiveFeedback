@@ -853,7 +853,7 @@ const MyQuestions = () => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [uploadLoading, setUploadLoading] = useState(false)
   const [expandedFeedbackQuestionId, setExpandedFeedbackQuestionId] = useState<number | null>(null)
-  const [questions, setQuestions] = useState<Question[]>([])
+  const [, setQuestions] = useState<Question[]>([])
 
   const theme = useTheme()
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
@@ -876,7 +876,7 @@ const MyQuestions = () => {
     const fetchQuestions = async () => {
       try {
         setInitialLoading(true)
-        // setMyQuestions(currentUser?.questions || [])
+        setMyQuestions(currentUser?.questions || [])
       } catch (err) {
         setError("Failed to load questions. Please try again.")
       } finally {
@@ -888,21 +888,21 @@ const MyQuestions = () => {
   }, [dispatch, currentUser])
 
 
-  useEffect(() => {
-    console.log(questions);
-    
-    if(!questions || questions.length === 0) return;
-    
-    const filtered = questions.filter(q => q.userId == currentUser?.id)
-    setMyQuestions(filtered);
-
-  }, [questions])
-  // Update local state when user data changes
   // useEffect(() => {
-  //   if (currentUser?.questions) {
-  //     setMyQuestions(currentUser.questions || [])
-  //   }
-  // }, [currentUser])
+  //   console.log(questions);
+    
+  //   if(!questions || questions.length === 0) return;
+    
+  //   const filtered = questions.filter(q => q.userId == currentUser?.id)
+  //   setMyQuestions(filtered);
+
+  // }, [questions])
+  // Update local state when user data changes
+  useEffect(() => {
+    if (currentUser?.questions) {
+      setMyQuestions(currentUser.questions || [])
+    }
+  }, [currentUser])
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, question: Question) => {
     setAnchorEl(event.currentTarget)
