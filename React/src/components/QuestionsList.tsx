@@ -1057,7 +1057,7 @@ const QuestionsList = () => {
     }
 
     try {
-      const shareUrl = `${window.location.origin}/questions/${selectedQuestionForShare.id}`
+      const shareUrl = `${window.location.origin}/All`
       await sendEmail({
         to: shareEmail,
         subject: "Check out this question on Feedback Platform!",

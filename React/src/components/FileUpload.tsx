@@ -701,7 +701,7 @@ const FileUpload = () => {
                     }
                   </div>
                   <div style="text-align: center; margin: 32px 0;">
-                    <a href="https://your-platform.com/questions/${response.data.id}" style="display: inline-block; padding: 12px 24px; background-color: ${colors.primary}; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">View Question</a>
+                    <a href="https://livefeedback-client.onrender.com/all" style="display: inline-block; padding: 12px 24px; background-color: ${colors.primary}; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">View Question</a>
                   </div>
                   <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
                   <p style="font-size: 0.9em; color: #777; text-align: center;">Thank you for being part of our community!<br />The Feedback Platform Team</p>
