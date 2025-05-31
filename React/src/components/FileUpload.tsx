@@ -513,13 +513,13 @@ const allowedTypes = [
 const maxSize = 10 * 1024 * 1024 // 10MB
 // FileUpload.tsx
 
-function cleanFileName(fileName: string): string {
-  return fileName
-    .replace(/[^\p{L}\p{N}_.-]/gu, '_') // משאיר רק אותיות, מספרים, קווים ונקודות
-    .replace(/_{2,}/g, '_')             // מסיר כפילויות של קווים תחתונים
-    .replace(/^_+|_+$/g, '')            // מסיר קווים מההתחלה או מהסוף
-    .toLowerCase();                     // הכל באותיות קטנות (אם רוצים)
-}
+// function cleanFileName(fileName: string): string {
+//   return fileName
+//     .replace(/[^\p{L}\p{N}_.-]/gu, '_') // משאיר רק אותיות, מספרים, קווים ונקודות
+//     .replace(/_{2,}/g, '_')             // מסיר כפילויות של קווים תחתונים
+//     .replace(/^_+|_+$/g, '')            // מסיר קווים מההתחלה או מהסוף
+//     .toLowerCase();                     // הכל באותיות קטנות (אם רוצים)
+// }
 
 const FileUpload = () => {
   const [question, setQuestion] = useState("")
