@@ -876,7 +876,7 @@ const MyQuestions = () => {
     const fetchQuestions = async () => {
       try {
         setInitialLoading(true)
-        setMyQuestions(currentUser?.questions || [])
+        // setMyQuestions(currentUser?.questions || [])
       } catch (err) {
         setError("Failed to load questions. Please try again.")
       } finally {
@@ -890,16 +890,16 @@ const MyQuestions = () => {
 
   useEffect(() => {
     if(!questions || questions.length === 0) return;
-    const filtered = questions.filter(q => q.userId === currentUser?.id)
+    const filtered = questions.filter(q => q.userId == currentUser?.id)
     setMyQuestions(filtered);
 
   }, [questions])
   // Update local state when user data changes
-  useEffect(() => {
-    if (currentUser?.questions) {
-      setMyQuestions(currentUser.questions || [])
-    }
-  }, [currentUser])
+  // useEffect(() => {
+  //   if (currentUser?.questions) {
+  //     setMyQuestions(currentUser.questions || [])
+  //   }
+  // }, [currentUser])
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, question: Question) => {
     setAnchorEl(event.currentTarget)
