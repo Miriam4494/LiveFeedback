@@ -847,13 +847,13 @@ const MyQuestions = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<Question>({} as Question)
   const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
-  const [initialLoading, setInitialLoading] = useState(true)
+  const [initialLoading, ] = useState(true)
   const [success, setSuccess] = useState("")
   const [error, setError] = useState("")
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [uploadLoading, setUploadLoading] = useState(false)
   const [expandedFeedbackQuestionId, setExpandedFeedbackQuestionId] = useState<number | null>(null)
-  const [, setQuestions] = useState<Question[]>([])
+  const [questions, setQuestions] = useState<Question[]>([])
 
   const theme = useTheme()
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
@@ -872,31 +872,32 @@ const MyQuestions = () => {
     setQuestions(q || [])
   }, [q])
   // Fetch questions on component mount
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        setInitialLoading(true)
-        setMyQuestions(currentUser?.questions || [])
-      } catch (err) {
-        setError("Failed to load questions. Please try again.")
-      } finally {
-        setInitialLoading(false)
-      }
-    }
-
-    fetchQuestions()
-  }, [dispatch, currentUser])
-
-
   // useEffect(() => {
-  //   console.log(questions);
-    
-  //   if(!questions || questions.length === 0) return;
-    
-  //   const filtered = questions.filter(q => q.userId == currentUser?.id)
-  //   setMyQuestions(filtered);
+  //   const fetchQuestions = async () => {
+  //     try {
+  //       console.log(currentUser);
+  //       setInitialLoading(true)
+  //       setMyQuestions(currentUser?.questions || [])
+  //     } catch (err) {
+  //       setError("Failed to load questions. Please try again.")
+  //     } finally {
+  //       setInitialLoading(false)
+  //     }
+  //   }
 
-  // }, [questions])
+  //   fetchQuestions()
+  // }, [dispatch, currentUser])
+
+
+  useEffect(() => {
+    console.log(questions);
+    
+    if(!questions || questions.length === 0) return;
+    
+    const filtered = questions.filter(q => q.userId == currentUser?.id)
+    setMyQuestions(filtered);
+
+  }, [questions, currentUser,dispatch])
   // Update local state when user data changes
   useEffect(() => {
     if (currentUser?.questions) {
