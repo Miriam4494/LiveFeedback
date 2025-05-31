@@ -47,15 +47,16 @@ import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../redux/Store"
 import { motion } from "framer-motion"
 import { clearUser } from "../redux/UserSlice"
+import { colors } from "./them"
 
 // New elegant color palette
-const colors = {
-  primary: "#E07A5F", // Terracotta
-  secondary: "#3D405B", // Dark slate blue
-  light: "#F4F1DE", // Cream
-  accent: "#81B29A", // Sage green
-  dark: "#2D3142", // Dark blue-gray
-}
+// const colors = {
+//   primary: "#E07A5F", // Terracotta
+//   secondary: "#3D405B", // Dark slate blue
+//   light: "#F4F1DE", // Cream
+//   accent: "#81B29A", // Sage green
+//   dark: "#2D3142", // Dark blue-gray
+// }
 // const colors = {
 //   primary: "#E8B4B8", // Rose
 //   secondary: "#C49799", // Dusty rose

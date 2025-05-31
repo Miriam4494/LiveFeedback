@@ -756,18 +756,19 @@ import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 // import { AddIcon, AllIcon, ImageIcon, LogoutIcon, ProfileIcon, QuestionIcon, ThumbUpIcon } from "./icons/TritoneIcons"
 import {  HomeIcon } from "lucide-react"
+import { colors } from "./them"
 
 const Home = () => {
   // const theme = useTheme()
 
   // New elegant color palette
-  const colors = {
-    primary: "#E07A5F", // Terracotta
-    secondary: "#3D405B", // Dark slate blue
-    light: "#F4F1DE", // Cream
-    accent: "#81B29A", // Sage green
-    dark: "#2D3142", // Dark blue-gray
-  }
+  // const colors = {
+  //   primary: "#E07A5F", // Terracotta
+  //   secondary: "#3D405B", // Dark slate blue
+  //   light: "#F4F1DE", // Cream
+  //   accent: "#81B29A", // Sage green
+  //   dark: "#2D3142", // Dark blue-gray
+  // }
 
   const features = [
     {

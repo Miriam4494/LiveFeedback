@@ -541,15 +541,16 @@ import axios from "axios"
 import { downloadFileDirectly, downloadFileViaProxy } from "../services/api-service"
 import ImageViewerModal from "./ImageViewerModalProps"
 // import ImageViewerModal from "./ImageViewerModal"
+import { colors } from "./them"
 
 // New elegant color palette
-const colors = {
-  primary: "#E07A5F", // Terracotta
-  secondary: "#3D405B", // Dark slate blue
-  light: "#F4F1DE", // Cream
-  accent: "#81B29A", // Sage green
-  dark: "#2D3142", // Dark blue-gray
-}
+// const colors = {
+//   primary: "#E07A5F", // Terracotta
+//   secondary: "#3D405B", // Dark slate blue
+//   light: "#F4F1DE", // Cream
+//   accent: "#81B29A", // Sage green
+//   dark: "#2D3142", // Dark blue-gray
+// }
 
 interface ShowFileProps {
   fileName: string

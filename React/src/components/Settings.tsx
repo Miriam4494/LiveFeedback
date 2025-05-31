@@ -301,15 +301,16 @@ import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../redux/Store"
 import { updateUser } from "../redux/UserSlice"
 import type { UserType } from "../types/User"
+import { colors } from "./them"
 
 // New elegant color palette
-const colors = {
-  primary: "#E07A5F", // Terracotta
-  secondary: "#3D405B", // Dark slate blue
-  light: "#F4F1DE", // Cream
-  accent: "#81B29A", // Sage green
-  dark: "#2D3142", // Dark blue-gray
-}
+// const colors = {
+//   primary: "#E07A5F", // Terracotta
+//   secondary: "#3D405B", // Dark slate blue
+//   light: "#F4F1DE", // Cream
+//   accent: "#81B29A", // Sage green
+//   dark: "#2D3142", // Dark blue-gray
+// }
 
 const Settings = () => {
   const user = useSelector((state: RootState) => state.User.user)

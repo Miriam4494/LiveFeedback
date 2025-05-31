@@ -510,15 +510,17 @@ import { useNavigate } from "react-router-dom"
 import { sendEmail } from "../services/Email"
 import type { AppDispatch, RootState } from "../redux/Store"
 import type { LoginUserType, RegisterUserType } from "../types/User"
+import { colors } from "./them"
+
 const AuthPopup = () => {
   // New elegant color palette
-  const colors = {
-    primary: "#E07A5F", // Terracotta
-    secondary: "#3D405B", // Dark slate blue
-    light: "#F4F1DE", // Cream
-    accent: "#81B29A", // Sage green
-    dark: "#2D3142", // Dark blue-gray
-  }
+  // const colors = {
+  //   primary: "#E07A5F", // Terracotta
+  //   secondary: "#3D405B", // Dark slate blue
+  //   light: "#F4F1DE", // Cream
+  //   accent: "#81B29A", // Sage green
+  //   dark: "#2D3142", // Dark blue-gray
+  // }
 
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState("")

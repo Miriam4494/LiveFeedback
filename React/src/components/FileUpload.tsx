@@ -484,15 +484,16 @@ import type { AppDispatch, RootState } from "../redux/Store"
 import { updateUser } from "../redux/UserSlice"
 import { sendEmail } from "../services/Email"
 import { motion } from "framer-motion"
+import { colors } from "./them"
 
 // New elegant color palette
-const colors = {
-  primary: "#E07A5F", // Terracotta
-  secondary: "#3D405B", // Dark slate blue
-  light: "#F4F1DE", // Cream
-  accent: "#81B29A", // Sage green
-  dark: "#2D3142", // Dark blue-gray
-}
+// const colors = {
+//   primary: "#E07A5F", // Terracotta
+//   secondary: "#3D405B", // Dark slate blue
+//   light: "#F4F1DE", // Cream
+//   accent: "#81B29A", // Sage green
+//   dark: "#2D3142", // Dark blue-gray
+// }
 const apiUrl = import.meta.env.VITE_API_URL;
 // const apiUrl = "https://live-feedback-lgcr.onrender.com/api/"
 
@@ -510,6 +511,15 @@ const allowedTypes = [
 ]
 
 const maxSize = 10 * 1024 * 1024 // 10MB
+// FileUpload.tsx
+
+function cleanFileName(fileName: string): string {
+  return fileName
+    .replace(/[^\p{L}\p{N}_.-]/gu, '_') // משאיר רק אותיות, מספרים, קווים ונקודות
+    .replace(/_{2,}/g, '_')             // מסיר כפילויות של קווים תחתונים
+    .replace(/^_+|_+$/g, '')            // מסיר קווים מההתחלה או מהסוף
+    .toLowerCase();                     // הכל באותיות קטנות (אם רוצים)
+}
 
 const FileUpload = () => {
   const [question, setQuestion] = useState("")
@@ -614,7 +624,7 @@ const FileUpload = () => {
     try {
       setUploading(true)
       setError(null)
-
+      
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           const newProgress = prev + Math.random() * 10
@@ -641,19 +651,22 @@ const FileUpload = () => {
       // Upload files if any
       if (files.length > 0) {
         for (const file of files) {
+          const cleanedName = cleanFileName(file.name);
+        const cleanFile =new File([file], cleanedName, { type: file.type });
+          // file.name = cleanFileName(file.name) // Clean file name
           const uploadUrlResponse = await axios.get(`${API_BASE_URL}S3/upload-url`, {
-            params: { fileName: file.name, contentType: file.type },
+            params: { fileName: cleanFile.name, contentType: cleanFile.type },
           })
 
-          await axios.put(uploadUrlResponse.data.url, file, {
+          await axios.put(uploadUrlResponse.data.url, cleanFile, {
             headers: { "Content-Type": file.type },
           })
 
-          const downloadUrlResponse = await axios.get(`${API_BASE_URL}S3/download-url/${file.name}`)
+          const downloadUrlResponse = await axios.get(`${API_BASE_URL}S3/download-url/${cleanFile.name}`)
           await axios.post(`${API_BASE_URL}S3/save-file`, {
             imageUrl: downloadUrlResponse.data.downloadUrl,
             questionId: questionId,
-            name: file.name,
+            name: cleanFile.name,
           })
         }
       }
