@@ -592,7 +592,7 @@ const AuthPopup = () => {
               <p>Thank you for joining <strong>Feedback Platform</strong>! We're excited to have you on board.</p>
               <p>Here, you can share your questions, receive valuable feedback, and help others by sharing your insights.</p>
               <div style="text-align: center; margin: 32px 0;">
-                <a href="https://your-platform.com" style="display: inline-block; padding: 12px 24px; background-color: ${colors.primary}; color: white; text-decoration: none; border-radius: 6px; font-weight: 500;">Get Started</a>
+                <a href="https://livefeedback-client.onrender.com/" style="display: inline-block; padding: 12px 24px; background-color: ${colors.primary}; color: white; text-decoration: none; border-radius: 6px; font-weight: 500;">Get Started</a>
               </div>
               <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
               <p style="font-size: 0.9em; color: #777; text-align: center;">Thank you for joining us!<br />The Feedback Platform Team</p>
