@@ -513,13 +513,13 @@ const allowedTypes = [
 const maxSize = 10 * 1024 * 1024 // 10MB
 // FileUpload.tsx
 
-// function cleanFileName(fileName: string): string {
-//   return fileName
-//     .replace(/[^\p{L}\p{N}_.-]/gu, '_') // משאיר רק אותיות, מספרים, קווים ונקודות
-//     .replace(/_{2,}/g, '_')             // מסיר כפילויות של קווים תחתונים
-//     .replace(/^_+|_+$/g, '')            // מסיר קווים מההתחלה או מהסוף
-//     .toLowerCase();                     // הכל באותיות קטנות (אם רוצים)
-// }
+function cleanFileName(fileName: string): string {
+  return fileName
+    .replace(/[^\p{L}\p{N}_.-]/gu, '_') // משאיר רק אותיות, מספרים, קווים ונקודות
+    .replace(/_{2,}/g, '_')             // מסיר כפילויות של קווים תחתונים
+    .replace(/^_+|_+$/g, '')            // מסיר קווים מההתחלה או מהסוף
+    .toLowerCase();                     // הכל באותיות קטנות (אם רוצים)
+}
 
 const FileUpload = () => {
   const [question, setQuestion] = useState("")
@@ -651,22 +651,22 @@ const FileUpload = () => {
       // Upload files if any
       if (files.length > 0) {
         for (const file of files) {
-        //   const cleanedName = cleanFileName(file.name);
-        // const cleanFile =new File([file], cleanedName, { type: file.type });
+          const cleanedName = cleanFileName(file.name);
+        const cleanFile =new File([file], cleanedName, { type: file.type });
           // file.name = cleanFileName(file.name) // Clean file name
           const uploadUrlResponse = await axios.get(`${API_BASE_URL}S3/upload-url`, {
-            params: { fileName: file.name, contentType: file.type },
+            params: { fileName: cleanFile.name, contentType: cleanFile.type },
           })
 
-          await axios.put(uploadUrlResponse.data.url, file, {
-            headers: { "Content-Type": file.type },
+          await axios.put(uploadUrlResponse.data.url, cleanFile, {
+            headers: { "Content-Type": cleanFile.type },
           })
 
-          const downloadUrlResponse = await axios.get(`${API_BASE_URL}S3/download-url/${file.name}`)
+          const downloadUrlResponse = await axios.get(`${API_BASE_URL}S3/download-url/${cleanFile.name}`)
           await axios.post(`${API_BASE_URL}S3/save-file`, {
             imageUrl: downloadUrlResponse.data.downloadUrl,
             questionId: questionId,
-            name: file.name,
+            name: cleanFile.name,
           })
         }
       }
