@@ -168,8 +168,7 @@ const FileUpload = () => {
     const requiredPoints = files.length > 0 ? 5 : 3
     if ((user?.points || 0) < requiredPoints) {
       setError(
-        `You need at least ${requiredPoints} points to submit ${
-          files.length > 0 ? "a question with files" : "a question"
+        `You need at least ${requiredPoints} points to submit ${files.length > 0 ? "a question with files" : "a question"
         }.`,
       )
       return
@@ -178,7 +177,7 @@ const FileUpload = () => {
     try {
       setUploading(true)
       setError(null)
-      
+
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           const newProgress = prev + Math.random() * 10
@@ -206,7 +205,7 @@ const FileUpload = () => {
       if (files.length > 0) {
         for (const file of files) {
           const cleanedName = cleanFileName(file.name);
-        const cleanFile =new File([file], cleanedName, { type: file.type });
+          const cleanFile = new File([file], cleanedName, { type: file.type });
           // file.name = cleanFileName(file.name) // Clean file name
           const uploadUrlResponse = await axios.get(`${API_BASE_URL}S3/upload-url`, {
             params: { fileName: cleanFile.name, contentType: cleanFile.type },
@@ -226,26 +225,21 @@ const FileUpload = () => {
           })
 
 
-            try {
-              const response = await axios.post("http://localhost:8000/index-file", {
-                // s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
-                s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
-                content: `${finalTitle} ${question}`, // שרשור של הכותרת עם תוכן השאלה    file_id: fileId, // מזהה הקובץ
-                file_id: questionId, // מזהה הקובץ
-               
-              }, {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-          
-              console.log("Indexed successfully:", response.data);
-              return response.data; // מחזיר את התגובה מהשרת
-            } catch (error) {
-              console.error("Failed to index to Pinecone:", error);
-              throw error; // זורק שגיאה אם הבקשה נכשלה
-            }
-          
+
+          await axios.post("http://localhost:8000/index-file", {
+            // s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
+            s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
+            content: `${finalTitle} ${question}`, // שרשור של הכותרת עם תוכן השאלה    file_id: fileId, // מזהה הקובץ
+            file_id: questionId, // מזהה הקובץ
+
+          }, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+
+
 
         }
       }
@@ -273,11 +267,10 @@ const FileUpload = () => {
                   <div style="border: 1px solid #eee; padding: 16px; border-radius: 8px; background-color: #f9f9f9; margin-bottom: 20px;">
                     <p style="margin: 0;"><strong>Title:</strong> ${finalTitle}</p>
                     <p style="margin: 0;"><strong>Content:</strong> ${question}</p>
-                    ${
-                      files.length > 0
-                        ? `<p style="margin: 0;"><strong>Attachments:</strong> ${files.length} file(s) attached.</p>`
-                        : ""
-                    }
+                    ${files.length > 0
+                ? `<p style="margin: 0;"><strong>Attachments:</strong> ${files.length} file(s) attached.</p>`
+                : ""
+              }
                   </div>
                   <div style="text-align: center; margin: 32px 0;">
                     <a href="https://livefeedback-client.onrender.com/all" style="display: inline-block; padding: 12px 24px; background-color: ${colors.primary}; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">View Question</a>
