@@ -216,12 +216,37 @@ const FileUpload = () => {
             headers: { "Content-Type": cleanFile.type },
           })
 
+
+
           const downloadUrlResponse = await axios.get(`${API_BASE_URL}S3/download-url/${cleanFile.name}`)
           await axios.post(`${API_BASE_URL}S3/save-file`, {
             imageUrl: downloadUrlResponse.data.downloadUrl,
             questionId: questionId,
             name: cleanFile.name,
           })
+
+
+            try {
+              const response = await axios.post("http://localhost:8000/index-file", {
+                // s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
+                s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
+                content: `${finalTitle} ${question}`, // שרשור של הכותרת עם תוכן השאלה    file_id: fileId, // מזהה הקובץ
+                file_id: questionId, // מזהה הקובץ
+               
+              }, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+          
+              console.log("Indexed successfully:", response.data);
+              return response.data; // מחזיר את התגובה מהשרת
+            } catch (error) {
+              console.error("Failed to index to Pinecone:", error);
+              throw error; // זורק שגיאה אם הבקשה נכשלה
+            }
+          
+
         }
       }
 

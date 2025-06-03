@@ -852,6 +852,7 @@ import {
 import { SendIcon, BotIcon, UserIcon, XIcon, SparklesIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { colors } from "./them"
+import axios from "axios"
 
 interface Message {
   id: string
@@ -899,18 +900,27 @@ const ChatInterface = ({ onSearchResults, isLoading }: ChatInterfaceProps) => {
 
     try {
       // Send to Python server
-      const response = await fetch("http://localhost:8000/query-files", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: inputValue,
-          score_threshold: 0.3,
-        }),
-      })
+    //   const response = await fetch("http://localhost:8000/query-files", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       query: inputValue,
+    //       score_threshold: 0.3,
+    //     }),
+    //   })
+    
+const response = await axios.post("http://localhost:8000/query-files", {
+    query: inputValue,
+    score_threshold: 0.0,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-      const questionIds = await response.json()
+      const questionIds = response.data
 
       // Add bot response
       const botMessage: Message = {
