@@ -453,9 +453,16 @@ from typing import List
 import uvicorn
 
 
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://livefeedback-client.onrender.com"],  # רשימת מקורות מורשים
+    allow_credentials=True,
+    allow_methods=["*"],  # מתיר את כל סוגי הבקשות
+    allow_headers=["*"],  # מתיר את כל סוגי הכותרות
+)
 # ---- מודלים ל-Request ----
 
 class IndexFileRequest(BaseModel):
