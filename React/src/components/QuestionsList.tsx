@@ -1114,7 +1114,7 @@ export interface Feedback {
   createAt: Date
 }
 
-const QuestionsList = () => {
+const QuestionsListEnhanced = () => {
   // Keep all existing state
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
@@ -1137,6 +1137,7 @@ const QuestionsList = () => {
   const [chatFilteredQuestionIds, setChatFilteredQuestionIds] = useState<number[]>([])
   const [isChatFiltering, setIsChatFiltering] = useState(false)
   const [showAllQuestions, setShowAllQuestions] = useState(true)
+  const [isChatLoading, setIsChatLoading] = useState(false)
 
   const theme = useTheme()
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
@@ -1168,6 +1169,7 @@ const QuestionsList = () => {
     setChatFilteredQuestionIds(questionIds)
     setIsChatFiltering(true)
     setShowAllQuestions(false)
+    setIsChatLoading(false)
   }
 
   const handleShowAllQuestions = () => {
@@ -1361,7 +1363,7 @@ const QuestionsList = () => {
       </Box>
 
       {/* Chat Interface */}
-      <ChatInterface onSearchResults={handleChatSearchResults} isLoading={loading} />
+      <ChatInterface onSearchResults={handleChatSearchResults} isLoading={isChatLoading} />
 
       {/* Results Status */}
       <AnimatePresence>
@@ -2094,4 +2096,4 @@ const QuestionsList = () => {
   )
 }
 
-export default QuestionsList
+export default QuestionsListEnhanced
