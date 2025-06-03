@@ -12,3 +12,4 @@ pytesseract
 requests
 sentence_transformers
 uvicorn
+python-dotenv
