@@ -1,6 +1,6 @@
 Pillow
 boto3
-docx
+python-docx
 fastapi
 nest_asyncio
 openai
