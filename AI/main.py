@@ -461,5 +461,5 @@ def query_files(req: QueryFilesRequest):
 
 # uvicorn.run(app, host="0.0.0.0", port=8000)
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # ברירת מחדל ל־5000 להרצה מקומית
+    port = int(os.environ.get("PORT", 8000))  # ברירת מחדל ל־5000 להרצה מקומית
     uvicorn.run("main:app", host="0.0.0.0", port=port)
