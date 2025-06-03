@@ -1067,7 +1067,7 @@ const ChatInterface = ({ onSearchResults, isLoading }: ChatInterfaceProps) => {
               >
                 <Avatar
                   sx={{
-                    bgcolor: colors.primary,
+                    bgcolor: colors.dark,
                     width: 80,
                     height: 80,
                     boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
