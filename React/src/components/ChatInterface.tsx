@@ -1130,7 +1130,7 @@ const ChatInterface = ({ onSearchResults, isLoading }: ChatInterfaceProps) => {
                     borderRadius: 3,
                     maxWidth: 240,
                     bgcolor: "white",
-                    border: `2px solid ${colors.primary}`,
+                    border: `2px solid ${colors.dark}`,
                     boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
                     animation: "bounce 2s ease-in-out infinite",
                     "@keyframes bounce": {
