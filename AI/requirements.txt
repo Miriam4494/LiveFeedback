@@ -20,4 +20,5 @@ pinecone-client
 openai
 python-dotenv
 requests
+jupyter
 gunicorn
