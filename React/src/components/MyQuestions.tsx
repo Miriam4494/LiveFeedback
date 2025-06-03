@@ -935,7 +935,8 @@ const MyQuestions = () => {
     try {
       if (selectedQuestion) {
         await dispatch(deleteQuestion(selectedQuestion.id))
-        setMyQuestions((prev) => prev.filter((q) => q.id !== selectedQuestion.id))
+        // setMyQuestions((prev) => prev.filter((q) => q.id !== selectedQuestion.id))
+        setMyQuestions((prev) => Array.isArray(prev) ? prev.filter((q) => q.id !== selectedQuestion.id) : []);
         setSuccess("Question deleted successfully")
       }
     } catch (err) {

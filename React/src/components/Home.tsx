@@ -1179,15 +1179,10 @@ import {
   Group as GroupIcon,
 } from "@mui/icons-material"
 import { motion } from "framer-motion"
+import { colors } from "./them"
 // import Link fro
 
-const colors = {
-  primary: "#E07A5F", // Terracotta
-  secondary: "#3D405B", // Dark slate blue
-  light: "#F4F1DE", // Cream
-  accent: "#81B29A", // Sage green
-  dark: "#2D3142", // Dark blue-gray
-}
+
 
 export default function Home() {
   const features = [
