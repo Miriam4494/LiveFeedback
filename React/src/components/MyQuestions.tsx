@@ -958,20 +958,45 @@ const MyQuestions = () => {
     }
   }
 
+  // const handleDeleteImage = (questionId: number, imageId: number) => {
+  //   setMyQuestions((prev) => {
+  //     const updatedQuestions = prev.map((q) =>
+  //       q.id === questionId ? { ...q, images: q.images.filter((img) => img.id !== imageId) } : q,
+  //     )
+
+  //     if (selectedQuestion?.id === questionId) {
+  //       const updatedQuestion = updatedQuestions.find((q) => q.id === questionId)
+  //       setSelectedQuestion(updatedQuestion!)
+  //     }
+
+  //     return updatedQuestions
+  //   })
+  // }
   const handleDeleteImage = (questionId: number, imageId: number) => {
     setMyQuestions((prev) => {
+      // בדיקה ש-prev הוא מערך
+      if (!Array.isArray(prev)) return [];
+  
       const updatedQuestions = prev.map((q) =>
-        q.id === questionId ? { ...q, images: q.images.filter((img) => img.id !== imageId) } : q,
-      )
-
+        q.id === questionId
+          ? {
+              ...q,
+              // בדיקה ש-q.images הוא מערך
+              images: Array.isArray(q.images) ? q.images.filter((img) => img.id !== imageId) : [],
+            }
+          : q,
+      );
+  
       if (selectedQuestion?.id === questionId) {
-        const updatedQuestion = updatedQuestions.find((q) => q.id === questionId)
-        setSelectedQuestion(updatedQuestion!)
+        const updatedQuestion = updatedQuestions.find((q) => q.id === questionId);
+        if (updatedQuestion) {
+          setSelectedQuestion(updatedQuestion);
+        }
       }
-
-      return updatedQuestions
-    })
-  }
+  
+      return updatedQuestions;
+    });
+  };
 
   const handleDeleteFeedback = (questionId: number, feedbackId: number) => {
     setMyQuestions((prev) => {
