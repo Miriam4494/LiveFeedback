@@ -38,16 +38,17 @@ pinecone_index_name = "user-files"
 
 # מודל לאמבדינג
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-
+# embedding_model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
 # הורדת קובץ מ-S3
 import requests
-import tempfile
+aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID")
+aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
 
 def create_presigned_url(bucket_name, object_key, expiration=3600):
     s3_client = boto3.client(
         's3',
-        aws_access_key_id=os.getenv("AWS_ACCES_KEY_ID"),
-        aws_secret_access_key=os.getenv("AWS_SECRET_ACCES_KEY"),
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
         )
     try:
         response = s3_client.generate_presigned_url('get_object',
@@ -261,27 +262,42 @@ def split_text(text, max_chunk_size=500):
 
     return chunks
 
-# פונקציה עיקרית: קבלת קובץ, אינדוקס ושמירה ב-Pinecone
-def index_s3_file_for_user(s3_url: str, user_id: str,file_id: str):
+import uuid  # ודא שהמודול מיובא
+
+def index_s3_file_for_user(s3_url: str, content: str, file_id: str):
     # שלב 1: הורדה
     print(f"📥 הורדת הקובץ מ-S3: {s3_url}")
-    parsed_url = urlparse(s3_url)
-    bucket_name = parsed_url.netloc.split('.')[0]  
-    # object_key = parsed_url.path.lstrip('/')  
-    object_key = unquote(parsed_url.path.lstrip('/'))  # ✅ חשוב
+    try:
+        parsed_url = urlparse(s3_url)
+        netloc_parts = parsed_url.netloc.split('.')
+        if len(netloc_parts) < 2:
+            raise ValueError(f"Invalid S3 URL format: {s3_url}")
+        
+        bucket_name = netloc_parts[0]
+        object_key = unquote(parsed_url.path.lstrip('/'))  # ✅ חשוב
 
+        print("📂 object_key:", object_key)
 
-    print("📂 object_key:", object_key)
+        # יצירת Presigned URL
+        presigned_url = create_presigned_url(bucket_name, object_key)
 
-    # יצירת Presigned URL
-    presigned_url = create_presigned_url(bucket_name, object_key)
+        # הורדת הקובץ
+        local_file_path = download_s3_file(presigned_url)
+    except Exception as e:
+        print(f"❌ שגיאה במהלך הורדת הקובץ: {e}")
+        return
 
-    # הורדת הקובץ
-    local_file_path = download_s3_file(presigned_url)    
     # שלב 2: קריאת התוכן
-    text = extract_text(local_file_path)
-    if not text.strip():
-        print(f"⚠️ הקובץ ריק או לא נתמך: {s3_url}")
+    try:
+        text = extract_text(local_file_path)
+        if not text.strip():
+            print(f"⚠️ הקובץ ריק או לא נתמך: {s3_url}")
+            os.remove(local_file_path)
+            return
+        text = f"{content}\n{text}"  # שילוב content עם הטקסט מהקובץ
+
+    except Exception as e:
+        print(f"❌ שגיאה במהלך קריאת התוכן: {e}")
         os.remove(local_file_path)
         return
 
@@ -289,38 +305,45 @@ def index_s3_file_for_user(s3_url: str, user_id: str,file_id: str):
     text_chunks = split_text(text)
 
     # שלב 4: יצירת אמבדינגים
-    embeddings = embedding_model.encode(text_chunks)
+    try:
+        embeddings = embedding_model.encode(text_chunks)
+    except Exception as e:
+        print(f"❌ שגיאה במהלך יצירת אמבדינגים: {e}")
+        os.remove(local_file_path)
+        return
 
     # שלב 5: שליחה ל-Pinecone
-    if pinecone_index_name not in pinecone.list_indexes().names():
-        pinecone.create_index(
-            name=pinecone_index_name,
-            dimension=len(embeddings[0]),
-            metric="cosine",
-            spec=spec
-        )
+    try:
+        if pinecone_index_name not in pinecone.list_indexes().names():
+            pinecone.create_index(
+                name=pinecone_index_name,
+                dimension=len(embeddings[0]),
+                metric="cosine",
+                spec=spec
+            )
 
-    index = pinecone.Index(pinecone_index_name)
+        index = pinecone.Index(pinecone_index_name)
 
-    vectors = []
-    for idx, (chunk, embedding) in enumerate(zip(text_chunks, embeddings)):
-        vectors.append({
-            "id": f"{user_id}_{uuid.uuid4().hex}",
-            "values": embedding.tolist(),
-            "metadata": {
-                "user_id": user_id,
-                "file_id": file_id,
-                "text": chunk
-            }
-        })
+        vectors = []
+        for idx, (chunk, embedding) in enumerate(zip(text_chunks, embeddings)):
+            vectors.append({
+                "id": f"{file_id}_{uuid.uuid4().hex}",
+                "values": embedding.tolist(),
+                "metadata": {
+                    # "user_id": user_id,
+                    "file_id": file_id,
+                    "text": chunk
+                }
+            })
 
-    index.upsert(vectors)
+        index.upsert(vectors)
 
-    print(f"✔️ {len(vectors)} קטעים הוכנסו ל-Pinecone תחת משתמש {user_id} מהקובץ {file_id}")
-
-    # ניקוי קובץ זמני
-    os.remove(local_file_path)
-
+        # print(f"✔️ {len(vectors)} קטעים הוכנסו ל-Pinecone תחת משתמש {user_id} מהקובץ {file_id}")
+    except Exception as e:
+        print(f"❌ שגיאה במהלך שליחה ל-Pinecone: {e}")
+    finally:
+        # ניקוי קובץ זמני
+        os.remove(local_file_path)
 
 def describe_file_from_url(file_url):
     # שלב 1: הורדת הקובץ
@@ -372,14 +395,16 @@ def describe_file_from_url(file_url):
     else:
         return "Unsupported file type for automatic description."
 
-def query_user_files(user_id: str, query: str, score_threshold: float = 0.8):
+
+def query_user_files(query: str, score_threshold: float = 0.8, top_k: int = 10):
     """
-    פונקציה לחיפוש קבצים לפי שאילתה ו-user_id
+    פונקציה לחיפוש קבצים לפי שאילתה בלבד, כולל נרמול ציונים ומיון תוצאות
     """
-    print(f"🔍 חיפוש קבצים עבור user_id: {user_id} עם שאילתה: {query}")
+    print(f"🔍 חיפוש קבצים עם שאילתה: {query}")
     try:
         # יצירת אמבדינג לשאילתה
         query_embedding = embedding_model.encode([query])[0]
+        print(f"🤔 Query Embedding: {query_embedding}")
 
         # בדיקת קיום האינדקס
         if pinecone_index_name not in pinecone.list_indexes().names():
@@ -389,26 +414,38 @@ def query_user_files(user_id: str, query: str, score_threshold: float = 0.8):
         index = pinecone.Index(pinecone_index_name)
         results = index.query(
             vector=query_embedding.tolist(),
-            top_k=100,
-            include_metadata=True,
-            filter={"user_id": user_id}  # סינון לפי user_id
+            top_k=100,  # חיפוש ראשוני עם מספר גדול של תוצאות
+            include_metadata=True
         )
+        print(f"✅ Results: {results}")
 
-        # עיבוד התוצאות
-        query_results = []
-        for match in results["matches"]:
-            if match["score"] >= score_threshold:  # סינון לפי הסף
-                query_results.append({
-                    "file_id": match["metadata"]["file_id"],
-                    "text_snippet": match["metadata"]["text"],
-                    "score": match["score"]
-                })
+        # נרמול הציונים
+        def normalize_score(score):
+            return (score + 1) / 2  # הופך את הטווח מ-[-1, 1] ל-[0, 1]
 
-        return query_results
+        normalized_results = [
+            {
+                "file_id": str(match["metadata"]["file_id"]),  # המרה למחרוזת
+                "score": normalize_score(match["score"]),
+                "text": match["metadata"]["text"]
+            }
+            for match in results["matches"] if match["score"] >= score_threshold
+        ]
+
+        # מיון התוצאות לפי ציון (מהגבוה לנמוך)
+        sorted_results = sorted(normalized_results, key=lambda x: x["score"], reverse=True)
+
+        # הגבלת מספר התוצאות ל-top_k
+        limited_results = sorted_results[:top_k]
+
+        # החזרת רשימת ה-file_id בלבד
+        return [result["file_id"] for result in limited_results]
+
     except Exception as e:
         print(f"❗ שגיאה בחיפוש קבצים: {e}")
         raise
 
+  
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -422,14 +459,14 @@ app = FastAPI()
 # ---- מודלים ל-Request ----
 
 class IndexFileRequest(BaseModel):
-    s3_url: str
-    user_id: int
+    s3_url: str=""
+    # user_id: int
+    content: str =""
     file_id: int
 
 class QueryFilesRequest(BaseModel):
-    user_id: int
     query: str
-    score_threshold: float = 0.1  # סף ציון ברירת מחדל
+    score_threshold: float = 0.0 # סף ציון ברירת מחדל
 class QueryResult(BaseModel):
     file_id: int
     text_snippet: str
@@ -441,25 +478,21 @@ class QueryResult(BaseModel):
 def index_file(req: IndexFileRequest):
     try:
         print("req: ",req)
-        index_s3_file_for_user(req.s3_url, req.user_id, req.file_id)
+        index_s3_file_for_user(req.s3_url, req.content, req.file_id)
         return {"status": "success", "message": "File indexed successfully."}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-@app.post("/query-files", response_model=List[QueryResult])
+
+@app.post("/query-files", response_model=List[str])
 def query_files(req: QueryFilesRequest):
     try:
-        results = query_user_files(req.user_id, req.query, req.score_threshold)
-        return results
+        file_ids = query_user_files(req.query, req.score_threshold)
+        return file_ids
     except Exception as e:
-        return [{"file_id": "", "text_snippet": f"Error: {str(e)}", "score": 0.0}]
+        return [f"Error: {str(e)}"]
 
-# ---- הרצה ----
-
-# import nest_asyncio
-# nest_asyncio.apply()
-
-# uvicorn.run(app, host="0.0.0.0", port=8000)
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # ברירת מחדל ל־5000 להרצה מקומית
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    

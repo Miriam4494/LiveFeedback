@@ -42,66 +42,7 @@ export const updateUser = createAsyncThunk('user/update', async (user: UserType,
 });
 
 
-// const getUserIdFromToken = (token: string | null) => {
-//   if (token) {
-//     try {
-//       const decoded = jwtDecode<jwtType>(token);
-//       return decoded.sub;
-//     } catch (error) {
-//       console.error("Invalid token", error);
-//       return null;
-//     }
-//   }
-//   return null;
-// };
 
-// const fetchUserData = async ():Promise<UserState> => {
-//   const token = localStorage.getItem('token');
-//   if (token) {
-//     console.log(token);
-    
-//     try {
-//       const userId = getUserIdFromToken(token);
-//       console.log(userId);
-      
-//       if (!userId) {
-//         console.error("Invalid token");
-//       }
-//       const response = await axios.get(`https://live-feedback-lgcr.onrender.com/api/User/${userId}`, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-//       if (response.data) {
-//         return {user:response.data, loading: false, error: null};
-//       }
-
-//     } catch (error) {
-//       console.error('Error fetching user data:', error);
-//     }
-//   }
-//   return {user:null, loading:false, error:null};
-// };
-
-// type jwtType = {
-//   Token: String,
-//   sub: string
-// };
-// export const decodeToken = () => {
-//   const token = localStorage.getItem('token');
-//   if (token) {
-//     console.log(token);
-    
-//   try {
-    
-//     const payload = token.split(".")[1]
-//     const decoded = JSON.parse(atob(payload))
-//     return decoded
-//   } catch (err) {
-//     console.error("Failed to decode token", err)
-//     return null
-//   }}
-// }
 export const getInitialState = (): UserState => {
   const token = localStorage.getItem('token');
 
