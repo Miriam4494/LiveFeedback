@@ -6,7 +6,7 @@ nest_asyncio
 openai
 pdfplumber
 pinecone
-pptx
+python-pptx
 pydantic
 pytesseract
 requests
