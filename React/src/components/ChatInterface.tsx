@@ -1396,7 +1396,7 @@ const ChatInterface = ({ onSearchResults, isLoading }: ChatInterfaceProps) => {
                             borderColor: alpha(colors.secondary, 0.2),
                           },
                           "&:hover fieldset": {
-                            borderColor: alpha(colors.primary, 0.5),
+                            borderColor: alpha(colors.dark, 0.5),
                           },
                           "&.Mui-focused fieldset": {
                             borderColor: colors.primary,
