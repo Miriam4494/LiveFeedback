@@ -1300,7 +1300,7 @@ const ChatInterface = ({ onSearchResults, isLoading }: ChatInterfaceProps) => {
                           }}
                         >
                           {!message.isUser && (
-                            <Avatar sx={{ bgcolor: colors.primary, width: 32, height: 32 }}>
+                            <Avatar sx={{ bgcolor: colors.dark, width: 32, height: 32 }}>
                               <BotIcon size={16} />
                             </Avatar>
                           )}
