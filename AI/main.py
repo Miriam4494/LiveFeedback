@@ -266,41 +266,45 @@ import uuid  # ודא שהמודול מיובא
 
 def index_s3_file_for_user(s3_url: str, content: str, file_id: str):
     # שלב 1: הורדה
-    print(f"📥 הורדת הקובץ מ-S3: {s3_url}")
-    try:
-        parsed_url = urlparse(s3_url)
-        netloc_parts = parsed_url.netloc.split('.')
-        if len(netloc_parts) < 2:
-            raise ValueError(f"Invalid S3 URL format: {s3_url}")
-        
-        bucket_name = netloc_parts[0]
-        object_key = unquote(parsed_url.path.lstrip('/'))  # ✅ חשוב
+    if(s3_url!=""):  
+        print(f"📥 הורדת הקובץ מ-S3: {s3_url}")
+        try:
+            parsed_url = urlparse(s3_url)
+            netloc_parts = parsed_url.netloc.split('.')
+            if len(netloc_parts) < 2:
+                raise ValueError(f"Invalid S3 URL format: {s3_url}")
+            
+            bucket_name = netloc_parts[0]
+            object_key = unquote(parsed_url.path.lstrip('/'))  # ✅ חשוב
 
-        print("📂 object_key:", object_key)
+            print("📂 object_key:", object_key)
 
-        # יצירת Presigned URL
-        presigned_url = create_presigned_url(bucket_name, object_key)
+            # יצירת Presigned URL
+            presigned_url = create_presigned_url(bucket_name, object_key)
 
-        # הורדת הקובץ
-        local_file_path = download_s3_file(presigned_url)
-    except Exception as e:
-        print(f"❌ שגיאה במהלך הורדת הקובץ: {e}")
-        return
+            # הורדת הקובץ
+            local_file_path = download_s3_file(presigned_url)
+        except Exception as e:
+            print(f"❌ שגיאה במהלך הורדת הקובץ: {e}")
+            return
 
-    # שלב 2: קריאת התוכן
-    try:
-        text = extract_text(local_file_path)
-        if not text.strip():
-            print(f"⚠️ הקובץ ריק או לא נתמך: {s3_url}")
+        # שלב 2: קריאת התוכן
+        try:
+            text = extract_text(local_file_path)
+            if not text.strip():
+                print(f"⚠️ הקובץ ריק או לא נתמך: {s3_url}")
+                os.remove(local_file_path)
+                return
+            text = f"{content}\n{text}"  # שילוב content עם הטקסט מהקובץ
+
+        except Exception as e:
+            print(f"❌ שגיאה במהלך קריאת התוכן: {e}")
             os.remove(local_file_path)
             return
-        text = f"{content}\n{text}"  # שילוב content עם הטקסט מהקובץ
-
-    except Exception as e:
-        print(f"❌ שגיאה במהלך קריאת התוכן: {e}")
-        os.remove(local_file_path)
-        return
-
+    else:
+        # אם אין S3 URL, נשתמש בתוכן ישירות
+        text = content
+        local_file_path = None
     # שלב 3: חלוקה לחלקים
     text_chunks = split_text(text)
 
@@ -483,6 +487,7 @@ class QueryResult(BaseModel):
 
 @app.post("/index-file")
 def index_file(req: IndexFileRequest):
+    print("📂 Indexing file request received.")
     try:
         print("req: ",req)
         index_s3_file_for_user(req.s3_url, req.content, req.file_id)

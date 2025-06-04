@@ -215,8 +215,6 @@ const FileUpload = () => {
             headers: { "Content-Type": cleanFile.type },
           })
 
-
-
           const downloadUrlResponse = await axios.get(`${API_BASE_URL}S3/download-url/${cleanFile.name}`)
           await axios.post(`${API_BASE_URL}S3/save-file`, {
             imageUrl: downloadUrlResponse.data.downloadUrl,
@@ -224,8 +222,7 @@ const FileUpload = () => {
             name: cleanFile.name,
           })
 
-
-
+          // Upload file to S3 and index it
           await axios.post("http://localhost:8000/index-file", {
             // s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
             s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
@@ -242,6 +239,20 @@ const FileUpload = () => {
 
 
         }
+      }
+      else{
+        await axios.post("http://localhost:8000/index-file", {
+          // s3_url: downloadUrlResponse.data.downloadUrl, // כתובת ה-URL של הקובץ ב-S3
+          s3_url: "", // כתובת ה-URL של הקובץ ב-S3
+          content: `${finalTitle} ${question}`, // שרשור של הכותרת עם תוכן השאלה    file_id: fileId, // מזהה הקובץ
+          file_id: questionId, // מזהה הקובץ
+
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
       }
 
       // Send emails to users who want to receive notifications
