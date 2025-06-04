@@ -913,7 +913,7 @@ const ChatInterface = ({ onSearchResults, isLoading }: ChatInterfaceProps) => {
     
 const response = await axios.post("http://localhost:8000/query-files", {
     query: inputValue,
-    score_threshold: 0.0,
+    score_threshold: 0.3,
   }, {
     headers: {
       "Content-Type": "application/json",
@@ -927,7 +927,7 @@ const response = await axios.post("http://localhost:8000/query-files", {
         id: (Date.now() + 1).toString(),
         text:
           questionIds.length > 0
-            ? `I found ${questionIds.length} relevant questions for you! They're displayed below 👇`
+            ? `I found relevant questions for you! They're displayed below 👇`
             : "I couldn't find any relevant questions for your search. Try phrasing your question differently 🤔",
         isUser: false,
         timestamp: new Date(),

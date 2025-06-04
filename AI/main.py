@@ -477,7 +477,7 @@ class IndexFileRequest(BaseModel):
 
 class QueryFilesRequest(BaseModel):
     query: str
-    score_threshold: float = 0.0 # סף ציון ברירת מחדל
+    score_threshold: float = 0.3 # סף ציון ברירת מחדל
 class QueryResult(BaseModel):
     file_id: int
     text_snippet: str
