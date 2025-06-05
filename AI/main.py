@@ -501,47 +501,17 @@ def query_user_files(query: str, score_threshold: float = 0.8, top_k: int = 10):
 
         # סינון ראשוני של התאמות עם ציון >= 0.15
         # כעיחלצךת
-        # filtered_matches = [match for match in results["matches"] if match["score"] >= 0.15]
+        filtered_matches = [match for match in results["matches"] if match["score"] >= 0.15]
 
-        # # אם אין תוצאות בכלל – נחזיר ריק
-        # if not filtered_matches:
-        #     normalized_results = []
-
-        # else:
-        #     # מציאת הציון הכי גבוה
-        #     max_score = max(match["score"] for match in filtered_matches)
-
-        #     # מביאים רק את מי שבטווח של 0.05 מהציון הכי גבוה
-        #     normalized_results = [
-        #         {
-        #             "file_id": str(match["metadata"]["file_id"]),
-        #             "score": match["score"],
-        #             "text": match["metadata"]["text"]
-        #         }
-        #         for match in filtered_matches
-        #         if match["score"] >= max_score - 0.05
-        #     ]
-        
-
-
-
-        import numpy as np
-
-        # סינון ראשוני של תוצאות עם ציון לפחות 0.15
-        filtered_matches = [
-            match for match in results["matches"] if match["score"] >= 0.15
-        ]
-
-        # אם אין תוצאות, נחזיר רשימה ריקה
+        # אם אין תוצאות בכלל – נחזיר ריק
         if not filtered_matches:
             normalized_results = []
-        else:
-            # שלב 1: חישוב סטיית תקן
-            scores = [match["score"] for match in filtered_matches]
-            max_score = max(scores)
-            std = np.std(scores)
 
-            # שלב 2: סינון תוצאות שנמצאות בתוך סטיית תקן אחת מהציון הגבוה ביותר
+        else:
+            # מציאת הציון הכי גבוה
+            max_score = max(match["score"] for match in filtered_matches)
+
+            # מביאים רק את מי שבטווח של 0.05 מהציון הכי גבוה
             normalized_results = [
                 {
                     "file_id": str(match["metadata"]["file_id"]),
@@ -549,8 +519,38 @@ def query_user_files(query: str, score_threshold: float = 0.8, top_k: int = 10):
                     "text": match["metadata"]["text"]
                 }
                 for match in filtered_matches
-                if match["score"] >= max_score - std
+                if match["score"] >= max_score - 0.05
             ]
+        
+
+
+
+        # import numpy as np
+
+        # # סינון ראשוני של תוצאות עם ציון לפחות 0.15
+        # filtered_matches = [
+        #     match for match in results["matches"] if match["score"] >= 0.15
+        # ]
+
+        # # אם אין תוצאות, נחזיר רשימה ריקה
+        # if not filtered_matches:
+        #     normalized_results = []
+        # else:
+        #     # שלב 1: חישוב סטיית תקן
+        #     scores = [match["score"] for match in filtered_matches]
+        #     max_score = max(scores)
+        #     std = np.std(scores)
+
+        #     # שלב 2: סינון תוצאות שנמצאות בתוך סטיית תקן אחת מהציון הגבוה ביותר
+        #     normalized_results = [
+        #         {
+        #             "file_id": str(match["metadata"]["file_id"]),
+        #             "score": match["score"],
+        #             "text": match["metadata"]["text"]
+        #         }
+        #         for match in filtered_matches
+        #         if match["score"] >= max_score - std
+        #     ]
 
 
 
