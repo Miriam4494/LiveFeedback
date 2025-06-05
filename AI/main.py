@@ -3,6 +3,7 @@ import boto3
 import tempfile
 import mimetypes
 from dotenv import load_dotenv
+import numpy as np
 import pdfplumber
 import pytesseract
 from PIL import Image
@@ -37,8 +38,8 @@ spec = ServerlessSpec(
 pinecone_index_name = "user-files"
 
 # מודל לאמבדינג
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-# embedding_model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
+# embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+embedding_model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
 # הורדת קובץ מ-S3
 import requests
 aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID")
@@ -398,8 +399,48 @@ def describe_file_from_url(file_url):
 
     else:
         return "Unsupported file type for automatic description."
+def get_embedding(text):
+    text_chunks = split_text(text)
+    embeddings = embedding_model.encode(text_chunks)   
+    return embeddings
+pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"), ssl_verify=False)
+index = pc.Index("user-files")
 
 
+# def query_user_files(query, score_threshold):
+#     try:
+#         print("אני כאן!!!!!!!!!! שלום!!!!!!!!!!")
+        
+#         # יצירת אמבדינג לשאילתה
+#         query_embedding = get_embedding(query)
+#         print(query_embedding)
+        
+#         # בדיקה אם האמבדינג הוא מערך NumPy והמרה לרשימה אם נדרש
+#         if isinstance(query_embedding, np.ndarray):
+#             query_embedding = query_embedding.tolist() 
+        
+#         # ביצוע חיפוש באינדקס Pinecone
+#         results = index.query(
+#             vector=query_embedding,  # שימוש באמבדינג של השאילתה
+#             top_k=100,  # מספר התוצאות המקסימלי להחזיר
+#             include_metadata=True,  # החזרת המטא-דאטה של התוצאות
+#         )
+        
+#         # הדפסת תוצאות החיפוש
+#         print(f"🔍 תוצאות החיפוש: {results}")
+        
+#         # עיבוד התוצאות - הסרת שדה 'values' אם קיים
+#         for match in results.get("matches", []):
+#             if isinstance(match, dict) and "values" in match:
+#                 match.pop("values", None)  # הסרה בטוחה של השדה 'values'
+        
+#         # החזרת התוצאות המעובדות
+#         return results
+    
+#     except Exception as e:
+#         # טיפול בשגיאות והחזרת הודעת שגיאה
+#         print(f"❌ שגיאה: {e}")
+#         return {"error": str(e)}
 def query_user_files(query: str, score_threshold: float = 0.8, top_k: int = 10):
     """
     פונקציה לחיפוש קבצים לפי שאילתה בלבד, כולל נרמול ציונים ומיון תוצאות
@@ -418,23 +459,107 @@ def query_user_files(query: str, score_threshold: float = 0.8, top_k: int = 10):
         index = pinecone.Index(pinecone_index_name)
         results = index.query(
             vector=query_embedding.tolist(),
-            top_k=100,  # חיפוש ראשוני עם מספר גדול של תוצאות
+            top_k=5,  # חיפוש ראשוני עם מספר גדול של תוצאות
             include_metadata=True
         )
         print(f"✅ Results: {results}")
+        # נרמול הציוניםז
+        # def normalize_score(score):
+        #     print(f"🔢 Normalizing score: {score}")
+        #     n=(score + 1) / 2
+        #     print(f"🔢after Normalizing score: {n}")
 
-        # נרמול הציונים
-        def normalize_score(score):
-            return (score + 1) / 2  # הופך את הטווח מ-[-1, 1] ל-[0, 1]
+        #     return n  # הופך את הטווח מ-[-1, 1] ל-[0, 1]
 
-        normalized_results = [
-            {
-                "file_id": str(match["metadata"]["file_id"]),  # המרה למחרוזת
-                "score": normalize_score(match["score"]),
-                "text": match["metadata"]["text"]
-            }
-            for match in results["matches"] if match["score"] >= score_threshold
+        # normalized_results = [
+        #     {
+        #         "file_id": str(match["metadata"]["file_id"]),  # המרה למחרוזת
+        #         "score": (match["score"]),
+        #         "text": match["metadata"]["text"]
+        #     }
+        #     # for match in results["matches"] if match["score"] >= score_threshold
+        #     for match in results["matches"] if match["score"] >=0.1
+
+        # ]
+        # def adjust_score_by_length(score, text_length):
+        #     """
+        #     התאמת הציון לפי אורך הטקסט
+        #     """
+        #     print(f"🔧  score: {score} based on text length: {text_length}")
+        #     length_factor = min(1, text_length / 100)  # משקל מבוסס על אורך הטקסט (מקסימום 100 תווים)
+        #     adjusted_score = score * length_factor
+        #     print(f"🔧 Adjusted score: {adjusted_score} (original: {score}, length factor: {length_factor})")
+        #     return adjusted_score
+        # normalized_results = [
+        #     {
+        #         "file_id": str(match["metadata"]["file_id"]),
+        #         "score": (match["score"]), 
+        #         "text": match["metadata"]["text"]
+        #     }
+        #     for match in results["matches"] if match["score"] >= 0.15
+        # ]
+
+        # סינון ראשוני של התאמות עם ציון >= 0.15
+        # כעיחלצךת
+        # filtered_matches = [match for match in results["matches"] if match["score"] >= 0.15]
+
+        # # אם אין תוצאות בכלל – נחזיר ריק
+        # if not filtered_matches:
+        #     normalized_results = []
+
+        # else:
+        #     # מציאת הציון הכי גבוה
+        #     max_score = max(match["score"] for match in filtered_matches)
+
+        #     # מביאים רק את מי שבטווח של 0.05 מהציון הכי גבוה
+        #     normalized_results = [
+        #         {
+        #             "file_id": str(match["metadata"]["file_id"]),
+        #             "score": match["score"],
+        #             "text": match["metadata"]["text"]
+        #         }
+        #         for match in filtered_matches
+        #         if match["score"] >= max_score - 0.05
+        #     ]
+        
+
+
+
+        import numpy as np
+
+        # סינון ראשוני של תוצאות עם ציון לפחות 0.15
+        filtered_matches = [
+            match for match in results["matches"] if match["score"] >= 0.15
         ]
+
+        # אם אין תוצאות, נחזיר רשימה ריקה
+        if not filtered_matches:
+            normalized_results = []
+        else:
+            # שלב 1: חישוב סטיית תקן
+            scores = [match["score"] for match in filtered_matches]
+            max_score = max(scores)
+            std = np.std(scores)
+
+            # שלב 2: סינון תוצאות שנמצאות בתוך סטיית תקן אחת מהציון הגבוה ביותר
+            normalized_results = [
+                {
+                    "file_id": str(match["metadata"]["file_id"]),
+                    "score": match["score"],
+                    "text": match["metadata"]["text"]
+                }
+                for match in filtered_matches
+                if match["score"] >= max_score - std
+            ]
+
+
+
+
+
+
+
+
+
 
         # מיון התוצאות לפי ציון (מהגבוה לנמוך)
         sorted_results = sorted(normalized_results, key=lambda x: x["score"], reverse=True)
@@ -449,7 +574,6 @@ def query_user_files(query: str, score_threshold: float = 0.8, top_k: int = 10):
         print(f"❗ שגיאה בחיפוש קבצים: {e}")
         raise
 
-  
 
 from fastapi import FastAPI
 from pydantic import BaseModel
