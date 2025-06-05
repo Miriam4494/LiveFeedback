@@ -872,6 +872,7 @@ ${content}`
       {/* Header */}
       <Box
         sx={{
+          bgcolor: alpha("#ffffff", 0.95),
           borderBottom: "1px solid #e0e0e0",
           px: 3,
           py: 2,
@@ -879,7 +880,6 @@ ${content}`
           top: 0,
           zIndex: 10,
           backdropFilter: "blur(10px)",
-          bgcolor: alpha("white", 0.95),
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -910,7 +910,7 @@ ${content}`
                 >
                   <Box
                     sx={{
-                      bgcolor: "white",
+                      bgcolor: "#ffffff",
                       borderBottom: "1px solid #f0f0f0",
                       "&:hover": {
                         bgcolor: alpha(colors.primary, 0.02),
@@ -971,7 +971,7 @@ ${content}`
                                   height: 20,
                                   fontSize: "0.7rem",
                                   bgcolor: colors.primary,
-                                  color: "white",
+                                  color: "#ffffff",
                                   fontWeight: 600,
                                 }}
                               />
@@ -1174,7 +1174,7 @@ ${content}`
             sx={{
               py: 8,
               textAlign: "center",
-              bgcolor: "white",
+              bgcolor: "#ffffff",
               mx: 3,
               my: 2,
               borderRadius: 3,
@@ -1192,7 +1192,7 @@ ${content}`
         )}
 
         {mainFeedbacks.length > 3 && (
-          <Box sx={{ textAlign: "center", py: 3, bgcolor: "white", borderBottom: "1px solid #f0f0f0" }}>
+          <Box sx={{ textAlign: "center", py: 3, bgcolor: "#ffffff", borderBottom: "1px solid #f0f0f0" }}>
             <Button
               variant="text"
               onClick={toggleShowAllComments}
@@ -1216,7 +1216,7 @@ ${content}`
       {/* Comment Input */}
       <Box
         sx={{
-          bgcolor: "white",
+          bgcolor: "#ffffff",
           borderTop: "1px solid #e0e0e0",
           p: 3,
           position: "sticky",
@@ -1319,7 +1319,7 @@ ${content}`
                     disabled={!newFeedback.trim() || isSubmitting}
                     sx={{
                       bgcolor: newFeedback.trim() ? colors.primary : alpha(colors.secondary, 0.1),
-                      color: newFeedback.trim() ? "white" : alpha(colors.secondary, 0.4),
+                      color: newFeedback.trim() ? "#ffffff" : alpha(colors.secondary, 0.4),
                       "&:hover": {
                         bgcolor: newFeedback.trim() ? alpha(colors.primary, 0.9) : alpha(colors.secondary, 0.15),
                       },
