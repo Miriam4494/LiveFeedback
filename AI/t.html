@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לוגואים לפלטפורמת הפידבקים - הגוונים שלך</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F4F1DE 0%, #E8E4D0 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(61, 64, 91, 0.1);
+            border: 2px solid #F4F1DE;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #E07A5F 0%, #81B29A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #3D405B;
+            margin-bottom: 10px;
+        }
+
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #F4F1DE;
+            border-radius: 15px;
+        }
+
+        .color-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .color-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #3D405B;
+        }
+
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .logo-option {
+            background: linear-gradient(135deg, #F4F1DE 0%, #ffffff 100%);
+            border-radius: 20px;
+            padding: 30px;
+            border: 3px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(224, 122, 95, 0.1) 0%, rgba(129, 178, 154, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .logo-option:hover::before {
+            opacity: 1;
+        }
+
+        .logo-option:hover {
+            border-color: #E07A5F;
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(224, 122, 95, 0.2);
+        }
+
+        .logo-option.selected {
+            border-color: #E07A5F;
+            background: linear-gradient(135deg, rgba(224, 122, 95, 0.1) 0%, rgba(129, 178, 154, 0.1) 100%);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(224, 122, 95, 0.3);
+        }
+
+        .logo-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #E07A5F;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(224, 122, 95, 0.4);
+        }
+
+        .logo-canvas {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(61, 64, 91, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-option:hover .logo-canvas {
+            transform: scale(1.05);
+        }
+
+        .logo-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #3D405B;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-description {
+            color: #3D405B;
+            font-size: 1rem;
+            line-height: 1.5;
+            position: relative;
+            z-index: 2;
+            opacity: 0.8;
+        }
+
+        .preview-section {
+            margin-top: 60px;
+            padding-top: 50px;
+            border-top: 3px solid #F4F1DE;
+            text-align: center;
+        }
+
+        .preview-section h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #3D405B;
+            margin-bottom: 30px;
+        }
+
+        .preview-large {
+            width: 400px;
+            height: 400px;
+            margin: 30px auto;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(61, 64, 91, 0.15);
+            border: 5px solid #F4F1DE;
+        }
+
+        .download-section {
+            margin-top: 40px;
+        }
+
+        .format-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #E07A5F 0%, #81B29A 100%);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(224, 122, 95, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(224, 122, 95, 0.4);
+            background: linear-gradient(135deg, #d66b4f 0%, #6fa085 100%);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #F4F1DE;
+            border-top: 3px solid #E07A5F;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-section {
+            background: linear-gradient(135deg, #F4F1DE 0%, #E8E4D0 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 50px;
+            border-right: 6px solid #E07A5F;
+        }
+
+        .info-section h4 {
+            color: #3D405B;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-section li {
+            padding: 12px 0;
+            color: #3D405B;
+            font-size: 1.1rem;
+            position: relative;
+            padding-right: 35px;
+        }
+
+        .info-section li::before {
+            content: '🎨';
+            position: absolute;
+            right: 0;
+            top: 12px;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .logo-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .preview-large {
+                width: 300px;
+                height: 300px;
+            }
+
+            .color-palette {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 לוגואים לפלטפורמת הפידבקים</h1>
+            <p>עיצובים מותאמים אישית עם הגוונים שלך</p>
+            
+            <div class="color-palette">
+                <div class="color-item">
+                    <div class="color-circle" style="background: #E07A5F;"></div>
+                    <div class="color-name">Terracotta</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-circle" style="background: #3D405B;"></div>
+                    <div class="color-name">Dark Slate</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-circle" style="background: #F4F1DE;"></div>
+                    <div class="color-name">Cream</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-circle" style="background: #81B29A;"></div>
+                    <div class="color-name">Sage Green</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-circle" style="background: #2D3142;"></div>
+                    <div class="color-name">Dark Blue</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="logo-grid">
+            <div class="logo-option" onclick="selectLogo(1)" id="option1">
+                <canvas class="logo-canvas" id="logo1"></canvas>
+                <div class="logo-title">Modern Circle</div>
+                <div class="logo-description">לוגו מודרני עם עיגול וגרדיאנט טרקוטה-ירוק</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(2)" id="option2">
+                <canvas class="logo-canvas" id="logo2"></canvas>
+                <div class="logo-title">Speech Bubble Pro</div>
+                <div class="logo-description">בועת דיבור מקצועית עם צללים ועיצוב מתוחכם</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(3)" id="option3">
+                <canvas class="logo-canvas" id="logo3"></canvas>
+                <div class="logo-title">Minimalist Badge</div>
+                <div class="logo-description">תג מינימליסטי עם טיפוגרפיה נקייה</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(4)" id="option4">
+                <canvas class="logo-canvas" id="logo4"></canvas>
+                <div class="logo-title">Geometric Pattern</div>
+                <div class="logo-description">דפוס גיאומטרי עם נקודות ועיגולים</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(5)" id="option5">
+                <canvas class="logo-canvas" id="logo5"></canvas>
+                <div class="logo-title">Hexagon Design</div>
+                <div class="logo-description">עיצוב משושה מודרני עם אלמנטים גרפיים</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(6)" id="option6">
+                <canvas class="logo-canvas" id="logo6"></canvas>
+                <div class="logo-title">Layered Circles</div>
+                <div class="logo-description">עיגולים מרובדים עם אפקט עומק</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(7)" id="option7">
+                <canvas class="logo-canvas" id="logo7"></canvas>
+                <div class="logo-title">Chat Icon Modern</div>
+                <div class="logo-description">אייקון צ'אט מודרני עם אלמנטים דקורטיביים</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(8)" id="option8">
+                <canvas class="logo-canvas" id="logo8"></canvas>
+                <div class="logo-title">Corporate Shield</div>
+                <div class="logo-description">מגן קורפורטיבי עם עיצוב מקצועי</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(9)" id="option9">
+                <canvas class="logo-canvas" id="logo9"></canvas>
+                <div class="logo-title">Organic Shapes</div>
+                <div class="logo-description">צורות אורגניות עם גרדיאנטים רכים</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(10)" id="option10">
+                <canvas class="logo-canvas" id="logo10"></canvas>
+                <div class="logo-title">Tech Circles</div>
+                <div class="logo-description">עיגולים טכנולוגיים עם קווי חיבור</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(11)" id="option11">
+                <canvas class="logo-canvas" id="logo11"></canvas>
+                <div class="logo-title">Vintage Badge</div>
+                <div class="logo-description">תג וינטג' עם מסגרת דקורטיבית</div>
+            </div>
+
+            <div class="logo-option" onclick="selectLogo(12)" id="option12">
+                <canvas class="logo-canvas" id="logo12"></canvas>
+                <div class="logo-title">Abstract Flow</div>
+                <div class="logo-description">זרימה אבסטרקטית עם צורות נוזליות</div>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <h3>תצוגה מקדימה</h3>
+            <canvas class="preview-large" id="previewLarge"></canvas>
+            
+            <div class="download-section">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>מכין את הקובץ להורדה...</p>
+                </div>
+                
+                <div class="format-options">
+                    <button class="download-btn" onclick="downloadLogo('png')">
+                        📥 הורד PNG
+                    </button>
+                    <button class="download-btn" onclick="downloadLogo('svg')">
+                        📥 הורד SVG
+                    </button>
+                    <button class="download-btn" onclick="downloadLogo('jpg')">
+                        📥 הורד JPG
+                    </button>
+                    <button class="download-btn" onclick="downloadAllSizes()">
+                        📦 הורד כל הגדלים
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h4>מידע על הלוגואים:</h4>
+            <ul>
+                <li><strong>PNG:</strong> איכות גבוהה עם רקע שקוף - מושלם לאתרים ואפליקציות</li>
+                <li><strong>SVG:</strong> וקטור שניתן לשינוי גודל ללא איבוד איכות - מתאים לכל שימוש</li>
+                <li><strong>JPG:</strong> קובץ קטן עם רקע לבן - מתאים להדפסה ומצגות</li>
+                <li><strong>כל הגדלים:</strong> קבל את הלוגו ב-5 גדלים שונים (64px, 128px, 256px, 512px, 1024px)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let selectedLogoId = 1;
+        
+        // הגוונים שלך
+        const colors = {
+            primary: "#E07A5F",    // Terracotta
+            secondary: "#3D405B",  // Dark slate blue
+            light: "#F4F1DE",      // Cream
+            accent: "#81B29A",     // Sage green
+            dark: "#2D3142"        // Dark blue-gray
+        };
+
+        function selectLogo(logoId) {
+            // Remove previous selection
+            document.querySelectorAll('.logo-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked logo
+            document.getElementById(`option${logoId}`).classList.add('selected');
+            selectedLogoId = logoId;
+            
+            // Update large preview with animation
+            const previewCanvas = document.getElementById('previewLarge');
+            previewCanvas.style.transform = 'scale(0.8)';
+            previewCanvas.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                drawLogo(logoId, 'previewLarge', 400);
+                previewCanvas.style.transform = 'scale(1)';
+                previewCanvas.style.opacity = '1';
+            }, 150);
+        }
+
+        function drawLogo(logoId, canvasId, size = 200) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size with high DPI
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = size * dpr;
+            canvas.height = size * dpr;
+            canvas.style.width = size + 'px';
+            canvas.style.height = size + 'px';
+            ctx.scale(dpr, dpr);
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Enable anti-aliasing
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            
+            switch(logoId) {
+                case 1: drawModernCircle(ctx, size); break;
+                case 2: drawSpeechBubblePro(ctx, size); break;
+                case 3: drawMinimalistBadge(ctx, size); break;
+                case 4: drawGeometricPattern(ctx, size); break;
+                case 5: drawHexagonDesign(ctx, size); break;
+                case 6: drawLayeredCircles(ctx, size); break;
+                case 7: drawChatIconModern(ctx, size); break;
+                case 8: drawCorporateShield(ctx, size); break;
+                case 9: drawOrganicShapes(ctx, size); break;
+                case 10: drawTechCircles(ctx, size); break;
+                case 11: drawVintageBadge(ctx, size); break;
+                case 12: drawAbstractFlow(ctx, size); break;
+            }
+        }
+
+        function drawModernCircle(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Main circle with gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, colors.primary);
+            gradient.addColorStop(1, colors.accent);
+            
+            // Shadow
+            ctx.shadowColor = 'rgba(224, 122, 95, 0.3)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 10;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.35, 0, 2 * Math.PI);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Inner circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.25, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            
+            // Text
+            ctx.fillStyle = colors.primary;
+            ctx.font = `bold ${size * 0.12}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY);
+            
+            // Outer decorative ring
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.42, 0, 2 * Math.PI);
+            ctx.strokeStyle = colors.secondary;
+            ctx.lineWidth = size * 0.015;
+            ctx.stroke();
+        }
+
+        function drawSpeechBubblePro(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Speech bubble with gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, colors.primary);
+            gradient.addColorStop(0.5, colors.accent);
+            gradient.addColorStop(1, colors.secondary);
+            
+            // Shadow
+            ctx.shadowColor = 'rgba(61, 64, 91, 0.3)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 10;
+            
+            // Main bubble
+            ctx.beginPath();
+            roundRect(ctx, centerX - size * 0.3, centerY - size * 0.25, size * 0.6, size * 0.4, size * 0.06);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Bubble tail
+            ctx.beginPath();
+            ctx.moveTo(centerX - size * 0.15, centerY + size * 0.15);
+            ctx.lineTo(centerX - size * 0.25, centerY + size * 0.28);
+            ctx.lineTo(centerX, centerY + size * 0.15);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Inner highlight
+            ctx.beginPath();
+            roundRect(ctx, centerX - size * 0.25, centerY - size * 0.2, size * 0.5, size * 0.15, size * 0.03);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.fill();
+            
+            // Text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size * 0.15}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY - size * 0.05);
+        }
+
+        function drawMinimalistBadge(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Badge with gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, colors.primary);
+            gradient.addColorStop(1, colors.accent);
+            
+            // Shadow
+            ctx.shadowColor = 'rgba(224, 122, 95, 0.3)';
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetY = 8;
+            
+            ctx.beginPath();
+            roundRect(ctx, centerX - size * 0.35, centerY - size * 0.15, size * 0.7, size * 0.3, size * 0.05);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Border
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = size * 0.01;
+            ctx.stroke();
+            
+            // Text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size * 0.1}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FEEDBACK', centerX, centerY);
+            
+            // Decorative dots
+            ctx.fillStyle = colors.secondary;
+            ctx.beginPath();
+            ctx.arc(centerX - size * 0.25, centerY + size * 0.25, size * 0.025, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX + size * 0.25, centerY + size * 0.25, size * 0.025, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        function drawGeometricPattern(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Outer circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = colors.primary;
+            ctx.lineWidth = size * 0.02;
+            ctx.stroke();
+            
+            // Pattern dots
+            const numDots = 8;
+            const radius = size * 0.28;
+            
+            for (let i = 0; i < numDots; i++) {
+                const angle = (i / numDots) * Math.PI * 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                
+                ctx.beginPath();
+                ctx.arc(x, y, size * 0.035, 0, 2 * Math.PI);
+                ctx.fillStyle = i % 2 === 0 ? colors.primary : colors.accent;
+                ctx.fill();
+            }
+            
+            // Center element
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.12, 0, 2 * Math.PI);
+            ctx.fillStyle = colors.secondary;
+            ctx.fill();
+            
+            // Center text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size * 0.08}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY);
+        }
+
+        function drawHexagonDesign(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Hexagon
+            const hexRadius = size * 0.35;
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, colors.primary);
+            gradient.addColorStop(1, colors.accent);
+            
+            // Shadow
+            ctx.shadowColor = 'rgba(224, 122, 95, 0.3)';
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetY = 8;
+            
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const x = centerX + hexRadius * Math.cos(angle);
+                const y = centerY + hexRadius * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Inner hexagon
+            const innerRadius = size * 0.25;
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const x = centerX + innerRadius * Math.cos(angle);
+                const y = centerY + innerRadius * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            
+            // Text
+            ctx.fillStyle = colors.secondary;
+            ctx.font = `bold ${size * 0.12}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY);
+        }
+
+        function drawLayeredCircles(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Outer circle
+            const gradient1 = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size * 0.4);
+            gradient1.addColorStop(0, colors.accent);
+            gradient1.addColorStop(1, colors.primary);
+            
+            ctx.shadowColor = 'rgba(129, 178, 154, 0.3)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 10;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.4, 0, 2 * Math.PI);
+            ctx.fillStyle = gradient1;
+            ctx.fill();
+            
+            // Middle circle
+            const gradient2 = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size * 0.3);
+            gradient2.addColorStop(0, '#ffffff');
+            gradient2.addColorStop(1, 'rgba(255, 255, 255, 0.8)');
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.3, 0, 2 * Math.PI);
+            ctx.fillStyle = gradient2;
+            ctx.fill();
+            
+            // Inner circle
+            ctx.shadowColor = 'rgba(61, 64, 91, 0.2)';
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetY = 5;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.2, 0, 2 * Math.PI);
+            ctx.fillStyle = colors.secondary;
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size * 0.1}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY);
+        }
+
+        function drawChatIconModern(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Main chat bubble
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, colors.primary);
+            gradient.addColorStop(1, colors.accent);
+            
+            ctx.shadowColor = 'rgba(224, 122, 95, 0.3)';
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetY = 8;
+            
+            ctx.beginPath();
+            roundRect(ctx, centerX - size * 0.28, centerY - size * 0.22, size * 0.56, size * 0.35, size * 0.06);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Chat tail
+            ctx.beginPath();
+            ctx.moveTo(centerX - size * 0.12, centerY + size * 0.13);
+            ctx.lineTo(centerX - size * 0.2, centerY + size * 0.25);
+            ctx.lineTo(centerX + size * 0.02, centerY + size * 0.13);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Chat dots
+            const dotY = centerY - size * 0.05;
+            ctx.fillStyle = '#ffffff';
+            
+            ctx.beginPath();
+            ctx.arc(centerX - size * 0.12, dotY, size * 0.025, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX, dotY, size * 0.025, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX + size * 0.12, dotY, size * 0.025, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Decorative elements
+            ctx.fillStyle = colors.secondary;
+            ctx.beginPath();
+            ctx.arc(centerX + size * 0.3, centerY - size * 0.3, size * 0.03, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX - size * 0.3, centerY + size * 0.3, size * 0.025, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        function drawCorporateShield(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Shield shape
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, colors.secondary);
+            gradient.addColorStop(0.5, colors.primary);
+            gradient.addColorStop(1, colors.accent);
+            
+            ctx.shadowColor = 'rgba(61, 64, 91, 0.3)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 10;
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - size * 0.35);
+            ctx.lineTo(centerX + size * 0.25, centerY - size * 0.2);
+            ctx.lineTo(centerX + size * 0.25, centerY + size * 0.1);
+            ctx.quadraticCurveTo(centerX + size * 0.25, centerY + size * 0.3, centerX, centerY + size * 0.35);
+            ctx.quadraticCurveTo(centerX - size * 0.25, centerY + size * 0.3, centerX - size * 0.25, centerY + size * 0.1);
+            ctx.lineTo(centerX - size * 0.25, centerY - size * 0.2);
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Inner shield
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - size * 0.25);
+            ctx.lineTo(centerX + size * 0.15, centerY - size * 0.15);
+            ctx.lineTo(centerX + size * 0.15, centerY + size * 0.05);
+            ctx.quadraticCurveTo(centerX + size * 0.15, centerY + size * 0.2, centerX, centerY + size * 0.25);
+            ctx.quadraticCurveTo(centerX - size * 0.15, centerY + size * 0.2, centerX - size * 0.15, centerY + size * 0.05);
+            ctx.lineTo(centerX - size * 0.15, centerY - size * 0.15);
+            ctx.closePath();
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            
+            // Text
+            ctx.fillStyle = colors.secondary;
+            ctx.font = `bold ${size * 0.1}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY);
+        }
+
+        function drawOrganicShapes(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Organic shape 1
+            const gradient1 = ctx.createRadialGradient(centerX - size * 0.1, centerY - size * 0.1, 0, centerX, centerY, size * 0.3);
+            gradient1.addColorStop(0, colors.primary);
+            gradient1.addColorStop(1, 'rgba(224, 122, 95, 0.3)');
+            
+            ctx.shadowColor = 'rgba(224, 122, 95, 0.2)';
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetY = 8;
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX - size * 0.2, centerY - size * 0.15);
+            ctx.quadraticCurveTo(centerX + size * 0.1, centerY - size * 0.3, centerX + size * 0.25, centerY - size * 0.1);
+            ctx.quadraticCurveTo(centerX + size * 0.3, centerY + size * 0.1, centerX + size * 0.15, centerY + size * 0.2);
+            ctx.quadraticCurveTo(centerX - size * 0.1, centerY + size * 0.25, centerX - size * 0.25, centerY + size * 0.1);
+            ctx.quadraticCurveTo(centerX - size * 0.3, centerY - size * 0.1, centerX - size * 0.2, centerY - size * 0.15);
+            ctx.fillStyle = gradient1;
+            ctx.fill();
+            
+            // Organic shape 2
+            const gradient2 = ctx.createRadialGradient(centerX + size * 0.05, centerY + size * 0.05, 0, centerX, centerY, size * 0.25);
+            gradient2.addColorStop(0, colors.accent);
+            gradient2.addColorStop(1, 'rgba(129, 178, 154, 0.3)');
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX - size * 0.15, centerY - size * 0.1);
+            ctx.quadraticCurveTo(centerX + size * 0.05, centerY - size * 0.2, centerX + size * 0.2, centerY - size * 0.05);
+            ctx.quadraticCurveTo(centerX + size * 0.25, centerY + size * 0.15, centerX + size * 0.1, centerY + size * 0.18);
+            ctx.quadraticCurveTo(centerX - size * 0.05, centerY + size * 0.2, centerX - size * 0.2, centerY + size * 0.05);
+            ctx.quadraticCurveTo(centerX - size * 0.25, centerY - size * 0.05, centerX - size * 0.15, centerY - size * 0.1);
+            ctx.fillStyle = gradient2;
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Center circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.08, 0, 2 * Math.PI);
+            ctx.fillStyle = colors.secondary;
+            ctx.fill();
+            
+            // Text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size * 0.06}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY);
+        }
+
+        function drawTechCircles(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Main circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.35, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = colors.primary;
+            ctx.lineWidth = size * 0.02;
+            ctx.stroke();
+            
+            // Tech circles
+            const circles = [
+                { x: centerX - size * 0.15, y: centerY - size * 0.15, r: size * 0.04 },
+                { x: centerX + size * 0.15, y: centerY - size * 0.15, r: size * 0.04 },
+                { x: centerX - size * 0.15, y: centerY + size * 0.15, r: size * 0.04 },
+                { x: centerX + size * 0.15, y: centerY + size * 0.15, r: size * 0.04 }
+            ];
+            
+            // Draw connecting lines
+            ctx.strokeStyle = colors.accent;
+            ctx.lineWidth = size * 0.01;
+            
+            circles.forEach((circle, i) => {
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(circle.x, circle.y);
+                ctx.stroke();
+            });
+            
+            // Draw circles
+            circles.forEach((circle, i) => {
+                ctx.beginPath();
+                ctx.arc(circle.x, circle.y, circle.r, 0, 2 * Math.PI);
+                ctx.fillStyle = i % 2 === 0 ? colors.primary : colors.accent;
+                ctx.fill();
+            });
+            
+            // Center circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.08, 0, 2 * Math.PI);
+            ctx.fillStyle = colors.secondary;
+            ctx.fill();
+            
+            // Text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size * 0.06}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY);
+        }
+
+        function drawVintageBadge(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Outer decorative circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.4, 0, 2 * Math.PI);
+            ctx.strokeStyle = colors.secondary;
+            ctx.lineWidth = size * 0.015;
+            ctx.stroke();
+            
+            // Inner decorative circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.35, 0, 2 * Math.PI);
+            ctx.strokeStyle = colors.primary;
+            ctx.lineWidth = size * 0.01;
+            ctx.stroke();
+            
+            // Main badge
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, colors.primary);
+            gradient.addColorStop(1, colors.accent);
+            
+            ctx.shadowColor = 'rgba(224, 122, 95, 0.3)';
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetY = 8;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.28, 0, 2 * Math.PI);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Inner circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.2, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            
+            // Text
+            ctx.fillStyle = colors.secondary;
+            ctx.font = `bold ${size * 0.08}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FEEDBACK', centerX, centerY - size * 0.02);
+            
+            ctx.font = `${size * 0.04}px Inter, sans-serif`;
+            ctx.fillText('PLATFORM', centerX, centerY + size * 0.06);
+            
+            // Decorative stars
+            drawStar(ctx, centerX - size * 0.25, centerY - size * 0.25, size * 0.02, colors.accent);
+            drawStar(ctx, centerX + size * 0.25, centerY - size * 0.25, size * 0.02, colors.accent);
+            drawStar(ctx, centerX - size * 0.25, centerY + size * 0.25, size * 0.02, colors.accent);
+            drawStar(ctx, centerX + size * 0.25, centerY + size * 0.25, size * 0.02, colors.accent);
+        }
+
+        function drawAbstractFlow(ctx, size) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Background
+            ctx.fillStyle = colors.light;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Flow shape 1
+            const gradient1 = ctx.createLinearGradient(0, 0, size, size);
+            gradient1.addColorStop(0, colors.primary);
+            gradient1.addColorStop(1, 'rgba(224, 122, 95, 0.6)');
+            
+            ctx.shadowColor = 'rgba(224, 122, 95, 0.3)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetY = 10;
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX - size * 0.3, centerY);
+            ctx.bezierCurveTo(centerX - size * 0.1, centerY - size * 0.3, centerX + size * 0.1, centerY - size * 0.2, centerX + size * 0.3, centerY - size * 0.1);
+            ctx.bezierCurveTo(centerX + size * 0.2, centerY + size * 0.1, centerX, centerY + size * 0.2, centerX - size * 0.2, centerY + size * 0.1);
+            ctx.bezierCurveTo(centerX - size * 0.25, centerY + size * 0.05, centerX - size * 0.3, centerY, centerX - size * 0.3, centerY);
+            ctx.fillStyle = gradient1;
+            ctx.fill();
+            
+            // Flow shape 2
+            const gradient2 = ctx.createLinearGradient(size, 0, 0, size);
+            gradient2.addColorStop(0, colors.accent);
+            gradient2.addColorStop(1, 'rgba(129, 178, 154, 0.6)');
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX + size * 0.25, centerY - size * 0.05);
+            ctx.bezierCurveTo(centerX + size * 0.1, centerY + size * 0.2, centerX - size * 0.1, centerY + size * 0.15, centerX - size * 0.25, centerY + size * 0.05);
+            ctx.bezierCurveTo(centerX - size * 0.15, centerY - size * 0.1, centerX + size * 0.05, centerY - size * 0.15, centerX + size * 0.2, centerY - size * 0.1);
+            ctx.bezierCurveTo(centerX + size * 0.22, centerY - size * 0.08, centerX + size * 0.25, centerY - size * 0.05, centerX + size * 0.25, centerY - size * 0.05);
+            ctx.fillStyle = gradient2;
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Center element
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.1, 0, 2 * Math.PI);
+            ctx.fillStyle = colors.secondary;
+            ctx.fill();
+            
+            // Text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size * 0.07}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('FB', centerX, centerY);
+        }
+
+        function drawStar(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = (i * 4 * Math.PI) / 5;
+                const radius = i % 2 === 0 ? size : size * 0.5;
+                const px = x + radius * Math.cos(angle - Math.PI / 2);
+                const py = y + radius * Math.sin(angle - Math.PI / 2);
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        function showLoading() {
+            document.getElementById('loading').classList.add('show');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('show');
+        }
+
+        function downloadLogo(format) {
+            showLoading();
+            
+            setTimeout(() => {
+                const canvas = document.getElementById('previewLarge');
+                
+                if (format === 'svg') {
+                    downloadSVG();
+                    hideLoading();
+                    return;
+                }
+                
+                const link = document.createElement('a');
+                link.download = `feedback-logo-${selectedLogoId}.${format}`;
+                
+                if (format === 'jpg') {
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = canvas.width;
+                    tempCanvas.height = canvas.height;
+                    
+                    tempCtx.fillStyle = 'white';
+                    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                    tempCtx.drawImage(canvas, 0, 0);
+                    
+                    link.href = tempCanvas.toDataURL('image/jpeg', 0.95);
+                } else {
+                    link.href = canvas.toDataURL('image/png');
+                }
+                
+                link.click();
+                hideLoading();
+            }, 500);
+        }
+
+        function downloadSVG() {
+            // SVG generation would be implemented here
+            alert('SVG download will be implemented');
+        }
+
+        function downloadAllSizes() {
+            showLoading();
+            
+            const sizes = [64, 128, 256, 512, 1024];
+            
+            sizes.forEach((size, index) => {
+                setTimeout(() => {
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = size;
+                    tempCanvas.height = size;
+                    
+                    drawLogo(selectedLogoId, tempCanvas.id || 'temp', size);
+                    
+                    const link = document.createElement('a');
+                    link.download = `feedback-logo-${selectedLogoId}-${size}px.png`;
+                    link.href = tempCanvas.toDataURL('image/png');
+                    link.click();
+                    
+                    if (index === sizes.length - 1) {
+                        hideLoading();
+                    }
+                }, index * 200);
+            });
+        }
+
+        // Initialize logos on page load
+        window.onload = function() {
+            for (let i = 1; i <= 12; i++) {
+                drawLogo(i, `logo${i}`, 200);
+            }
+            selectLogo(1);
+        };
+    </script>
+</body>
+</html>
