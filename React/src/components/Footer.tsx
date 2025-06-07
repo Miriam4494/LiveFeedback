@@ -509,7 +509,7 @@ export function SimpleFooter() {
                 <Typography variant="body2" sx={{ color: "#9ca3af" }}>
                   © {new Date().getFullYear()}
                 </Typography>
-                <FavoriteIcon sx={{ fontSize: 14, color: "#ef4444" }} />
+                {/* <FavoriteIcon sx={{ fontSize: 14, color: "#ef4444" }} /> */}
               </Box>
 
               {/* Links - פשוט יותר */}
@@ -530,15 +530,17 @@ export function SimpleFooter() {
               >
                 <GitHubIcon fontSize="small" />
               </IconButton>
-              <p><a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=noreply.livefeedback@gmail.com&su=פנייה%20מאתר%MEETING&body=שלום%20רציתי%20לפנות%20בנוגע%20ל..."
+              <p>
+                
+                <a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=noreply.livefeedback@gmail.com&su=Inquiry%20from%20live%20feedback%20website&body=Hello,%20I%20would%20like%20to%20ask%20about..."
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ color: '#0077cc', textDecoration: 'none', marginLeft: '5px' }}
+                  style={{ color: colors.secondary, marginLeft: '5px' }}
                 >
-                  support@meetingSummerizer.co.il
+                  support@livefeedback.co.il
                 </a></p>
-              <Box
+              {/* <Box
                 component="a"
                 href="mailto:miri64494@gmail.com"
                 target="_blank"
@@ -559,7 +561,7 @@ export function SimpleFooter() {
               >
                 <MailIcon sx={{ fontSize: 16 }} />
                 <Typography variant="body2">Support</Typography>
-              </Box>
+              </Box> */}
             </Box>
           </Grid>
         </Grid>
