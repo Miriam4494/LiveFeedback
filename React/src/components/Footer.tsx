@@ -531,7 +531,7 @@ export function SimpleFooter() {
                 <GitHubIcon fontSize="small" />
               </IconButton>
               <p><a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=yaelina5261@gmail.com&su=פנייה%20מאתר%MEETING&body=שלום%20רציתי%20לפנות%20בנוגע%20ל..."
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=noreply.livefeedback@gmail.com&su=פנייה%20מאתר%MEETING&body=שלום%20רציתי%20לפנות%20בנוגע%20ל..."
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: '#0077cc', textDecoration: 'none', marginLeft: '5px' }}
