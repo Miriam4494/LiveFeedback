@@ -312,7 +312,7 @@
 "use client"
 
 import { Box, Container, Typography, IconButton, useMediaQuery, useTheme, Grid } from "@mui/material"
-import { GitHub as GitHubIcon, Favorite as FavoriteIcon, Mail as MailIcon } from "@mui/icons-material"
+import { GitHub as GitHubIcon } from "@mui/icons-material"
 import React from "react"
 import { colors } from "./them"
 
