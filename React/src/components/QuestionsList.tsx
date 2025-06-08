@@ -3445,49 +3445,91 @@ const QuestionsList = () => {
   }
 
   // Enhanced filtering logic that considers chat results
-  const filteredQuestions = (questions || [])
-    .filter((question) => {
-      if (isChatFiltering && !showAllQuestions) {
-        return chatFilteredQuestionIds.includes(question.id)
-      }
+  // const filteredQuestions = (questions || [])
+  //   .filter((question) => {
+  //     if (isChatFiltering && !showAllQuestions) {
+  //       return chatFilteredQuestionIds.includes(question.id)
+  //     }
 
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase()
-        return (
-          question.title.toLowerCase().includes(query) ||
-          question.content.toLowerCase().includes(query) ||
-          question.userName.toLowerCase().includes(query)
-        )
-      }
+  //     if (searchQuery) {
+  //       const query = searchQuery.toLowerCase()
+  //       return (
+  //         question.title.toLowerCase().includes(query) ||
+  //         question.content.toLowerCase().includes(query) ||
+  //         question.userName.toLowerCase().includes(query)
+  //       )
+  //     }
 
-      if (showWithImages && !showWithSongs) {
-        return question.images?.some((image) => /\.(jpg|jpeg|png|gif)$/i.test(image.name))
-      }
+  //     if (showWithImages && !showWithSongs) {
+  //       return question.images?.some((image) => /\.(jpg|jpeg|png|gif)$/i.test(image.name))
+  //     }
 
-      if (showWithSongs && !showWithImages) {
-        return question.images?.some((image) => /\.(mp3|wav|ogg)$/i.test(image.name))
-      }
+  //     if (showWithSongs && !showWithImages) {
+  //       return question.images?.some((image) => /\.(mp3|wav|ogg)$/i.test(image.name))
+  //     }
 
-      if (showWithImages && showWithSongs) {
-        return question.images?.some((image) => /\.(jpg|jpeg|png|gif|mp3|wav|ogg)$/i.test(image.name))
-      }
+  //     if (showWithImages && showWithSongs) {
+  //       return question.images?.some((image) => /\.(jpg|jpeg|png|gif|mp3|wav|ogg)$/i.test(image.name))
+  //     }
 
-      return true
-    })
-    .sort((a, b) => {
-      if (sortOption === "popular") {
-        return (b.usersUse || 0) - (a.usersUse || 0)
-      } else {
-        return new Date(b.createAt || "").getTime() - new Date(a.createAt || "").getTime()
-      }
-    })
+  //     return true
+  //   })
+  //   .sort((a, b) => {
+  //     if (sortOption === "popular") {
+  //       return (b.usersUse || 0) - (a.usersUse || 0)
+  //     } else {
+  //       return new Date(b.createAt || "").getTime() - new Date(a.createAt || "").getTime()
+  //     }
+  //   })
 
+  // if (loading) {
+  //   return (
+  //     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50vh" }}>
+  //       <CircularProgress size={60} thickness={4} sx={{ color: colors.primary }} />
+  //     </Box>
+  //   )
+  // }
+  const filteredQuestions = Array.isArray(questions) ? questions.filter((question) => {
+    if (isChatFiltering && !showAllQuestions) {
+      return chatFilteredQuestionIds.includes(question.id);
+    }
+  
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      return (
+        question.title?.toLowerCase().includes(query) ||
+        question.content?.toLowerCase().includes(query) ||
+        question.userName?.toLowerCase().includes(query)
+      );
+    }
+  
+    if (showWithImages && !showWithSongs) {
+      return Array.isArray(question.images) && question.images.some((image) => /\.(jpg|jpeg|png|gif)$/i.test(image.name));
+    }
+  
+    if (showWithSongs && !showWithImages) {
+      return Array.isArray(question.images) && question.images.some((image) => /\.(mp3|wav|ogg)$/i.test(image.name));
+    }
+  
+    if (showWithImages && showWithSongs) {
+      return Array.isArray(question.images) && question.images.some((image) => /\.(jpg|jpeg|png|gif|mp3|wav|ogg)$/i.test(image.name));
+    }
+  
+    return true;
+  }).sort((a, b) => {
+    if (sortOption === "popular") {
+      return (b.usersUse || 0) - (a.usersUse || 0);
+    } else {
+      return new Date(b.createAt || "").getTime() - new Date(a.createAt || "").getTime();
+    }
+  }) : [];
+  
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50vh" }}>
         <CircularProgress size={60} thickness={4} sx={{ color: colors.primary }} />
       </Box>
-    )
+    );
   }
 
   return (
