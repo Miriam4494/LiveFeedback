@@ -60,14 +60,7 @@ import { useTheme } from "@mui/material/styles"
 const apiUrl = import.meta.env.VITE_API_URL;
 import { colors } from "./them"
 
-// New elegant color palette
-// const colors = {
-//   primary: "#E07A5F", // Terracotta
-//   secondary: "#3D405B", // Dark slate blue
-//   light: "#F4F1DE", // Cream
-//   accent: "#81B29A", // Sage green
-//   dark: "#2D3142", // Dark blue-gray
-// }
+
 
 const API_BASE_URL = `${apiUrl}`
 
@@ -189,20 +182,6 @@ const MyQuestions = () => {
     }
   }
 
-  // const handleDeleteImage = (questionId: number, imageId: number) => {
-  //   setMyQuestions((prev) => {
-  //     const updatedQuestions = prev.map((q) =>
-  //       q.id === questionId ? { ...q, images: q.images.filter((img) => img.id !== imageId) } : q,
-  //     )
-
-  //     if (selectedQuestion?.id === questionId) {
-  //       const updatedQuestion = updatedQuestions.find((q) => q.id === questionId)
-  //       setSelectedQuestion(updatedQuestion!)
-  //     }
-
-  //     return updatedQuestions
-  //   })
-  // }
   const handleDeleteImage = (questionId: number, imageId: number) => {
     setMyQuestions((prev) => {
       // בדיקה ש-prev הוא מערך
@@ -229,18 +208,8 @@ const MyQuestions = () => {
     });
   };
 
-  // const handleDeleteFeedback = (questionId: number, feedbackId: number) => {
-  //   setMyQuestions((prev) => {
-  //     const updatedQuestions = prev.map((q) =>
-  //       q.id === questionId ? { ...q, feedbacks: q.feedbacks.filter((fb) => fb.id !== feedbackId) } : q,
-  //     )
-  //     if (selectedQuestion?.id === questionId) {
-  //       const updatedQuestion = updatedQuestions.find((q) => q.id === questionId)
-  //       setSelectedQuestion(updatedQuestion!)
-  //     }
-  //     return updatedQuestions
-  //   })
-  // }
+ 
+
   const handleDeleteFeedback = (questionId: number, feedbackId: number) => {
     setMyQuestions((prev) => {
       // בדיקה ש-prev הוא מערך

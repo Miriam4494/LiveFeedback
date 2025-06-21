@@ -40,16 +40,8 @@ import { sendEmail } from "../services/Email"
 import { motion } from "framer-motion"
 import { colors } from "./them"
 
-// New elegant color palette
-// const colors = {
-//   primary: "#E07A5F", // Terracotta
-//   secondary: "#3D405B", // Dark slate blue
-//   light: "#F4F1DE", // Cream
-//   accent: "#81B29A", // Sage green
-//   dark: "#2D3142", // Dark blue-gray
-// }
+
 const apiUrl = import.meta.env.VITE_API_URL;
-// const apiUrl = "https://live-feedback-lgcr.onrender.com/api/"
 
 const API_BASE_URL = `${apiUrl}`
 

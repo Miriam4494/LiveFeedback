@@ -4,7 +4,6 @@ import { Question } from "../components/QuestionsList";
 import { RootState } from "./Store";
 import { QuestionState } from "../types/User";
 const apiUrl = import.meta.env.VITE_API_URL;
-// const apiUrl = "https://live-feedback-lgcr.onrender.com/api/"
 
 
 export const getQuestions = createAsyncThunk('Questions/get', async (_, thunkApi) => {
@@ -54,21 +53,8 @@ export const updateQuestion = createAsyncThunk('Questions/put', async (question:
     }
 });
 
-// export const updateUseQuestion = createAsyncThunk('Questions/put', async (questionId: number, thunkApi) => {
-//     try {
 
 
-//         const response = await axios.put(`https://localhost:7230/api/Question/${questionId}`,
-//             { headers: { Authorization: `Bearer` + localStorage.getItem("token") } }
-//         );
-//         console.log(response.data);
-//         return response.data;
-
-//     } catch (error: any) {
-//         return thunkApi.rejectWithValue(error.message);
-
-//     }
-// });
 
 export const updateUseQuestion = createAsyncThunk('Questions/updateUsersUse', async (questionId: number, thunkApi) => {
     try {

@@ -2,12 +2,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LoginUserType, RegisterUserType, UserState, UserType } from "../types/User";
 import axios from "axios";
 import { RootState } from "./Store";
-// import { jwtDecode } from "jwt-decode";
 
 
 export const loginAndRegisterUser = createAsyncThunk('user/loginAndRegister',
   async (user: LoginUserType | RegisterUserType, thunkApi) => {
-    // console.log("loginAndRegisterUser");
     
     try {
       const status = "UserName" in user ? "register" : "login";

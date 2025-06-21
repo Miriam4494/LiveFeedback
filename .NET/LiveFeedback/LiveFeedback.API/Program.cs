@@ -23,8 +23,6 @@ namespace LiveFeedback.API
     {
         public static void Main(string[] args)
         {
-
-
             DotNetEnv.Env.Load();
 
             var builder = WebApplication.CreateBuilder(args);
@@ -34,10 +32,6 @@ namespace LiveFeedback.API
             );
             var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]); // בדקי שהאזור נכון
             var s3Client = new AmazonS3Client(credentials, region);
-
-
-
-
 
             builder.Services.AddControllers()
             .AddJsonOptions(options =>
